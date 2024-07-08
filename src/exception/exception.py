@@ -5,8 +5,11 @@ import sys
 # function for custom exception message:
 def error_message_detail(msg, error_detail) -> str:
     _, _, exc_tb = error_detail.exc_info()
+    # file with error:
     file_name = exc_tb.tb_frame.f_code.co_filename
+    # line where error occured
     line_number = exc_tb.tb_lineno
+    # type of error
     message = str(msg)
     # Error Message:
     error_message = (
