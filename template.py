@@ -27,8 +27,7 @@ list_of_files = [
     'src/pipeline/training_pipeline.py',
     'src/pipeline/prediction_pipeline.py',
     # source ----- utils
-    'src/utils/__init__.py',
-    'src/utils/utils.py',
+    'src/utils.py',
 
     # test folder for testing
     #'tests/__init__.py',
