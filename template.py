@@ -13,11 +13,9 @@ list_of_files = [
     # source code folder:
     'src/__init__.py',
     # exception handling:
-    'src/exception/__init__.py',
-    'src/exception/exception.py',
+    'src/exception.py',
     # logger:
-    'src/logger/__init__.py',
-    'src/logger/logger.py',
+    'src/logger.py',
     # source ----- components
     'src/components/__init__.py',
     'src/components/data_ingestion.py',
