@@ -1,6 +1,6 @@
 # files:
 data-description.txt
-experiment.py
+experiments.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

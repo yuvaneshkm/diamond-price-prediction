@@ -1,6 +1,6 @@
 # Importing necessary libraries:
 import sys
-
+from logger import logging
 
 # Creating a class to handle exceprion by inheriting Exception class:
 class CustomException(Exception):
@@ -24,4 +24,4 @@ if __name__ == "__main__":
         print("Hello")
         9 / 0
     except Exception as e:
-        print(CustomException(e))
+        logging.info(CustomException(e))
