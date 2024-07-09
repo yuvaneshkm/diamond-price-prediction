@@ -17,7 +17,7 @@ list_of_files = [
     'src/exception/exception.py',
     # logger:
     'src/logger/__init__.py',
-    'src/logger/logging.py',
+    'src/logger/logger.py',
     # source ----- components
     'src/components/__init__.py',
     'src/components/data_ingestion.py',
