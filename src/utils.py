@@ -31,3 +31,24 @@ def load_object(filepath:Path):
         file_obj.close()
     except Exception as ex:
         logging.info(CustomException(ex))
+
+
+# numeric and categoric columns:
+def numeric_categoric_columns(raw_data_path):
+    # reading raw data:
+    raw_df = pd.read_csv(raw_data_path)
+    raw_df.drop('price', axis=1, inplace=True)
+    # numeric and categoric columns:
+    numeric_col = []
+    categoric_col = []
+    for col in raw_df.columns:
+        if raw_df[col].dtype=='object':
+            categoric_col.append(col)
+        else:
+            numeric_col.append(col)
+    # returning numeric and categoric columns:
+    return(
+        numeric_col,
+        categoric_col
+    )
+
