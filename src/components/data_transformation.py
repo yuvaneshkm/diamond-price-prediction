@@ -126,7 +126,7 @@ class DataTransformation:
             logging.info(CustomException(ex))
 
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     diobj = data_ingestion.DataIngestion()
     (
         raw_data_path,
@@ -138,4 +138,4 @@ if __name__ == "__main__":
     raw_data_path = Path(raw_data_path)
     train_data_path = Path(train_data_path)
     test_data_path = Path(test_data_path)
-    obj.initiate_data_transformation(raw_data_path, train_data_path, test_data_path)
+    obj.initiate_data_transformation(raw_data_path, train_data_path, test_data_path)'''

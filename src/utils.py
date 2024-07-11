@@ -56,3 +56,12 @@ def categoric_col_order() -> Tuple[List[str], List[str], List[str]]:
     clarity_order = ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"]
 
     return (cut_order, color_order, clarity_order)
+
+
+# Evaluate the model:
+def evaluate_model():
+    try:
+        
+        pass
+    except Exception as ex:
+        logging.info(CustomException(ex))
