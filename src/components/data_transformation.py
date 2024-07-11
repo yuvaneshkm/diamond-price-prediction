@@ -135,4 +135,7 @@ if __name__ == "__main__":
     ) = diobj.initiate_data_ingestion()
 
     obj = DataTransformation()
+    raw_data_path = Path(raw_data_path)
+    train_data_path = Path(train_data_path)
+    test_data_path = Path(test_data_path)
     obj.initiate_data_transformation(raw_data_path, train_data_path, test_data_path)
