@@ -10,17 +10,6 @@ from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 
 
-'''
-# Initiate data ingestion object:
-diobj = data_ingestion.DataIngestion()
-raw_data_path, train_data_path, test_data_path = diobj.initiate_data_ingestion()
-raw_data_path = Path(raw_data_path)
-train_data_path = Path(train_data_path)
-test_data_path = Path(test_data_path)
-
-# Initiate data transformation object:
-data = data_transformation.DataTransformation()
-train_df, test_df = data.initiate_data_transformation(raw_data_path, train_data_path, test_data_path)'''
 
 @dataclass
 class ModelTrainerConfig:

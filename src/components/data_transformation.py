@@ -10,7 +10,6 @@ from sklearn.preprocessing import RobustScaler, OrdinalEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from src.utils import numeric_categoric_columns, categoric_col_order, save_object
-from src.components import data_ingestion
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -124,18 +123,3 @@ class DataTransformation:
 
         except Exception as ex:
             logging.info(CustomException(ex))
-
-
-'''if __name__ == "__main__":
-    diobj = data_ingestion.DataIngestion()
-    (
-        raw_data_path,
-        train_data_path,
-        test_data_path,
-    ) = diobj.initiate_data_ingestion()
-
-    obj = DataTransformation()
-    raw_data_path = Path(raw_data_path)
-    train_data_path = Path(train_data_path)
-    test_data_path = Path(test_data_path)
-    obj.initiate_data_transformation(raw_data_path, train_data_path, test_data_path)'''

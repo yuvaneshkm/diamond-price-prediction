@@ -76,11 +76,7 @@ class DataIngestion:
 
             logging.info("Data Ingestion Completed")
 
-            return (
-                raw_df_path,
-                train_df_path,
-                test_df_path
-            )
+            return (raw_df_path, train_df_path, test_df_path)
 
         except Exception as ex:
             logging.info(CustomException(ex))
