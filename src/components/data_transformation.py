@@ -29,7 +29,7 @@ class DataTransformation:
     def get_data_transformer(self, raw_data_path: Path):
         try:
             # data transformation:
-            logging.info("Data Preprocessing initiated")
+            logging.info("Creating Data Preprocessor")
 
             # get numeric and categoric columns:
             logging.info("Getting Numeric and Categoric columns")
@@ -77,13 +77,14 @@ class DataTransformation:
     def initiate_data_transformation(
         self, raw_data_path: Path, train_data_path: Path, test_data_path: Path
     ):
+        logging.info("Data Transformation Started")
         try:
             # loading train and test data:
             logging.info("Loading train and test data")
             train_df = pd.read_csv(train_data_path)
             test_df = pd.read_csv(test_data_path)
-            logging.info(f"Train DataFrame: \n {train_df.head()}")
-            logging.info(f"Test DataFrame: \n {test_df.head()}")
+            logging.info(f"Train DataFrame:\n{train_df.head()}")
+            logging.info(f"Test DataFrame:\n{test_df.head()}")
 
             # get preprocessing object:
             logging.info("Loading Preprocessor object")
@@ -102,9 +103,9 @@ class DataTransformation:
             # preprocessing on test and train data:
             logging.info("Preprocess Train and Test data")
             pre_X_train_df = preprocessor_obj.fit_transform(X_train_df)
-            logging.info(f"Preprocessed Train data \n {pre_X_train_df.head()}")
+            logging.info(f"Preprocessed Train data\n{pre_X_train_df.head()}")
             pre_X_test_df = preprocessor_obj.transform(X_test_df)
-            logging.info(f"Preprocessed Test data \n {pre_X_test_df.head()}")
+            logging.info(f"Preprocessed Test data\n{pre_X_test_df.head()}")
 
             # Final Preprocessed Train and Test data:
             pre_train_df = pd.concat([pre_X_train_df, y_train_df], axis=1)

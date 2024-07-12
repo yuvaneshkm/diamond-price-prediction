@@ -24,6 +24,8 @@ class DataIngestion:
         self.ingestion_config = DataIngestionConfig()
 
     def initiate_data_ingestion(self):
+        """Output is a typle of (raw_data_path, train_data_path, test_data_path)"""
+
         logging.info("Data Ingestion Started")
         try:
             # Initializing mongodb connector:
