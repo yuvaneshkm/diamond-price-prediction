@@ -1,11 +1,15 @@
 # Importing necessary libraries:
 import os
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
+import numpy as np
 from src.logger import logging
 from src.exception import CustomException
 import pandas as pd
 import pickle
+from sklearn.metrics import r2_score
+
+MatrixLike = Union[List[List[float]], List[List[int]], np.ndarray]
 
 
 # saving whether a model or a preprocessing object:
@@ -51,6 +55,9 @@ def numeric_categoric_columns(raw_data_path: Path) -> Tuple[List[str], List[str]
 
 # categoric columns order:
 def categoric_col_order() -> Tuple[List[str], List[str], List[str]]:
+    '''
+    Order of the output: ([cut_order], [color_order], [clarity_order])'''
+
     cut_order = ["Fair", "Good", "Very Good", "Premium", "Ideal"]
     color_order = ["J", "I", "H", "G", "F", "E", "D"]
     clarity_order = ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"]
@@ -59,9 +66,32 @@ def categoric_col_order() -> Tuple[List[str], List[str], List[str]]:
 
 
 # Evaluate the model:
-def evaluate_model():
+def evaluate_model(X_train:MatrixLike, y_train:MatrixLike, X_val:MatrixLike, y_val:MatrixLike, models:dict)->MatrixLike:
+    '''
+    Output is a DataFrame of (ModelName, Model, R2Score'''
     try:
-        
-        pass
+        trained_model_name = []
+        trained_model = []
+        R2_score = []
+
+        for model_name, model in models.items():
+            # Training the model:
+            model.fit(X_train, y_train)
+            # Test the model with test data:
+            y_pred = model.predict(X_val)
+            # R2 score:
+            r2 = r2_score(y_val, y_pred)
+            # Append all the informations:
+            trained_model_name.append(model_name)
+            trained_model.append(model)
+            R2_score.append(r2)
+            
+        report = pd.DataFrame()
+        report['ModelName'] = trained_model_name
+        report['Model'] = trained_model
+        report['R2Score'] = R2_score
+
+        return report
+    
     except Exception as ex:
         logging.info(CustomException(ex))
