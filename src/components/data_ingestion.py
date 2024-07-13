@@ -1,5 +1,6 @@
 # Importing necessary libraries:
 import os
+from typing import Tuple
 from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
@@ -23,8 +24,13 @@ class DataIngestion:
     def __init__(self):
         self.ingestion_config = DataIngestionConfig()
 
-    def initiate_data_ingestion(self):
-        """Output is a typle of (raw_data_path, train_data_path, test_data_path)"""
+    def initiate_data_ingestion(self) -> Tuple[str, str, str]:
+        """
+        * This method will ingest data from MongoDB database and split data into
+        Train and Test set and store the data in the artifacts folder.
+        * The output of this method is a tuple of
+        (raw_data_path, train_data_path, test_data_path)
+        """
 
         logging.info("Data Ingestion Started")
         try:
