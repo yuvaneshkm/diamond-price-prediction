@@ -1,5 +1,6 @@
 # Importing necessary libraries:
 import os
+from typing import Tuple
 from pathlib import Path
 from src.logger import logging
 from src.exception import CustomException
@@ -27,6 +28,7 @@ class DataTransformation:
 
     # Get Data Transformation:
     def get_data_transformer(self, raw_data_path: Path):
+        '''This method will return the Preprocessing object'''
         try:
             # data transformation:
             logging.info("Creating Data Preprocessor")
@@ -74,9 +76,7 @@ class DataTransformation:
             logging.info(CustomException(ex))
 
     # Initiate Data Transformation:
-    def initiate_data_transformation(
-        self, raw_data_path: Path, train_data_path: Path, test_data_path: Path
-    ):
+    def initiate_data_transformation(self, raw_data_path: Path, train_data_path: Path, test_data_path: Path) -> Tuple[pd.DataFrame, pd.DataFrame]:
         logging.info("Data Transformation Started")
         try:
             # loading train and test data:
@@ -94,7 +94,6 @@ class DataTransformation:
             logging.info("Split Dependent and Independent variable of Train Data")
             X_train_df = train_df.drop("price", axis=1)
             y_train_df = train_df[["price"]]
-
             # Test data --> Dependent and Independent features:
             logging.info("Split Dependent and Independent variable of Test Data")
             X_test_df = test_df.drop("price", axis=1)
@@ -102,25 +101,25 @@ class DataTransformation:
 
             # preprocessing on test and train data:
             logging.info("Preprocess Train and Test data")
-            pre_X_train_df = preprocessor_obj.fit_transform(X_train_df)
-            logging.info(f"Preprocessed Train data\n{pre_X_train_df.head()}")
-            pre_X_test_df = preprocessor_obj.transform(X_test_df)
-            logging.info(f"Preprocessed Test data\n{pre_X_test_df.head()}")
-
-            # Final Preprocessed Train and Test data:
-            pre_train_df = pd.concat([pre_X_train_df, y_train_df], axis=1)
-            pre_test_df = pd.concat([pre_X_test_df, y_test_df], axis=1)
+            # Train data:
+            preprocessed_X_train_df = preprocessor_obj.fit_transform(X_train_df)
+            preprocessed_train_df = pd.concat([preprocessed_X_train_df, y_train_df], axis=1)
+            logging.info(f"Preprocessed Train data\n{preprocessed_train_df.head()}")
+            # Test data:
+            preprocessed_X_test_df = preprocessor_obj.transform(X_test_df)
+            preprocessed_test_df = pd.concat([preprocessed_X_test_df, y_test_df], axis=1)
+            logging.info(f"Preprocessed Test data\n{preprocessed_test_df.head()}")
 
             # save the preprocessor object in artifact folder:
             directory = Path(os.path.dirname(raw_data_path))
             save_object(
                 directory,
                 self.data_transformation_config.preprocessor_obj_file_name,
-                preprocessor_obj,
+                preprocessor_obj
             )
-            logging.info("Saved the Preprocessor Object at artifacts folder")
+            logging.info("Saved the Preprocessor Object to the artifacts folder")
 
-            return (pre_train_df, pre_test_df)
+            return (preprocessed_train_df, preprocessed_test_df)
 
         except Exception as ex:
             logging.info(CustomException(ex))

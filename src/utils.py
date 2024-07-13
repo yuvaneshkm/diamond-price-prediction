@@ -36,7 +36,9 @@ def load_object(filepath: Path):
 
 # numeric and categoric columns:
 def numeric_categoric_columns(raw_data_path: Path) -> Tuple[List[str], List[str]]:
-    """This function will give list of all the Numeric and Categoric columns in the dataset"""
+    """
+    * This function will give list of all the Numeric and Categoric columns in the dataset
+    * The Output of the function is (numeric_col, categoric_col)"""
     # reading raw data:
     raw_df = pd.read_csv(raw_data_path)
     raw_df.drop("price", axis=1, inplace=True)
