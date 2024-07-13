@@ -28,7 +28,7 @@ class DataTransformation:
 
     # Get Data Transformation:
     def get_data_transformer(self, raw_data_path: Path):
-        '''This method will return the Preprocessing object'''
+        """This method will return the Preprocessing object"""
         try:
             # data transformation:
             logging.info("Creating Data Preprocessor")
@@ -76,7 +76,9 @@ class DataTransformation:
             logging.info(CustomException(ex))
 
     # Initiate Data Transformation:
-    def initiate_data_transformation(self, raw_data_path: Path, train_data_path: Path, test_data_path: Path) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def initiate_data_transformation(
+        self, raw_data_path: Path, train_data_path: Path, test_data_path: Path
+    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         logging.info("Data Transformation Started")
         try:
             # loading train and test data:
@@ -103,11 +105,15 @@ class DataTransformation:
             logging.info("Preprocess Train and Test data")
             # Train data:
             preprocessed_X_train_df = preprocessor_obj.fit_transform(X_train_df)
-            preprocessed_train_df = pd.concat([preprocessed_X_train_df, y_train_df], axis=1)
+            preprocessed_train_df = pd.concat(
+                [preprocessed_X_train_df, y_train_df], axis=1
+            )
             logging.info(f"Preprocessed Train data\n{preprocessed_train_df.head()}")
             # Test data:
             preprocessed_X_test_df = preprocessor_obj.transform(X_test_df)
-            preprocessed_test_df = pd.concat([preprocessed_X_test_df, y_test_df], axis=1)
+            preprocessed_test_df = pd.concat(
+                [preprocessed_X_test_df, y_test_df], axis=1
+            )
             logging.info(f"Preprocessed Test data\n{preprocessed_test_df.head()}")
 
             # save the preprocessor object in artifact folder:
@@ -115,7 +121,7 @@ class DataTransformation:
             save_object(
                 directory,
                 self.data_transformation_config.preprocessor_obj_file_name,
-                preprocessor_obj
+                preprocessor_obj,
             )
             logging.info("Saved the Preprocessor Object to the artifacts folder")
 
