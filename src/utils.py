@@ -6,11 +6,12 @@ from src.logger import logging
 from src.exception import CustomException
 import pandas as pd
 import pickle
-from sklearn.metrics import r2_score
+# from sklearn.model_selection import KFold, cross_val_score
 
 
 # saving whether a model or a preprocessing object:
 def save_object(directory: Path, filename: str, object):
+    """This function will save ML model and Preprocessing object as a pickle file"""
     try:
         directory = Path(directory)
         os.makedirs(directory, exist_ok=True)
@@ -24,6 +25,7 @@ def save_object(directory: Path, filename: str, object):
 
 # loading the model or preprocessing object:
 def load_object(filepath: Path):
+    """This function will load the ML model and Preprocessing object"""
     try:
         filepath = Path(filepath)
         with open(filepath, "rb") as file_obj:
@@ -34,6 +36,7 @@ def load_object(filepath: Path):
 
 # numeric and categoric columns:
 def numeric_categoric_columns(raw_data_path: Path) -> Tuple[List[str], List[str]]:
+    """This function will give list of all the Numeric and Categoric columns in the dataset"""
     # reading raw data:
     raw_df = pd.read_csv(raw_data_path)
     raw_df.drop("price", axis=1, inplace=True)
@@ -52,47 +55,11 @@ def numeric_categoric_columns(raw_data_path: Path) -> Tuple[List[str], List[str]
 # categoric columns order:
 def categoric_col_order() -> Tuple[List[str], List[str], List[str]]:
     """
-    Order of the output: ([cut_order], [color_order], [clarity_order])"""
+    * This function will give the order of weight of items present in the categoric columns.
+    * Order of the output: ([cut_order], [color_order], [clarity_order])"""
 
     cut_order = ["Fair", "Good", "Very Good", "Premium", "Ideal"]
     color_order = ["J", "I", "H", "G", "F", "E", "D"]
     clarity_order = ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"]
 
     return (cut_order, color_order, clarity_order)
-
-
-# Evaluate the model:
-def evaluate_model(
-    X_train,
-    y_train,
-    X_val,
-    y_val,
-    models: dict,
-):
-    """Output is a DataFrame of (ModelName, Model, R2Score"""
-    try:
-        trained_model_name = []
-        trained_model = []
-        R2_score = []
-
-        for model_name, model in models.items():
-            # Training the model:
-            model.fit(X_train, y_train)
-            # Test the model with test data:
-            y_pred = model.predict(X_val)
-            # R2 score:
-            r2 = r2_score(y_val, y_pred)
-            # Append all the informations:
-            trained_model_name.append(model_name)
-            trained_model.append(model)
-            R2_score.append(r2)
-
-        report = pd.DataFrame()
-        report["ModelName"] = trained_model_name
-        report["Model"] = trained_model
-        report["R2Score"] = R2_score
-
-        return report
-
-    except Exception as ex:
-        logging.info(CustomException(ex))

@@ -32,33 +32,39 @@ class ModelTrainer:
             # Getting Transformed Train and Test Data:
             logging.info(f"Getting Transformed Train Data\n{pre_train_df.head()}")
 
-            # Splitting train data into Dependent and Independent Variables:
+            # Splitting train and test data into Dependent and Independent Variables:
             logging.info(
-                "Splitting the Train data into Independent(X) and Dependent(y) Variables"
+                "Splitting the Train and Test data into Independent(X) and Dependent(y) Variables"
             )
-            X = pre_train_df.drop("price", axis=1)
-            y = pre_train_df["price"]
-
-            # Splitting into Train and Validation datasets:
-            logging.info("Splitting Train Data into Training and Validation set")
-            X_train, X_val, y_train, y_val = train_test_split(
-                X, y, test_size=0.2, random_state=45
-            )
+            X_train = pre_train_df.drop("price", axis=1)
+            y_train = pre_train_df["price"]
 
             # Models to be used:
             models = {
-                "linearregression": LinearRegression(),
-                "lasso": Lasso(),
-                "ridge": Ridge(),
-                "elasticnet": ElasticNet(),
-                "decisiontree": DecisionTreeRegressor(),
-                "randomforest": RandomForestRegressor(),
-                "xgboost": XGBRegressor(),
+                "linearregression": (LinearRegression(), {}),
+                "lasso": (Lasso(), {"alpha": [0.1, 1.0, 10.0]}),
+                "ridge": (Ridge(), {"alpha": [0.1, 1.0, 10.0]}),
+                "elasticnet": (
+                    ElasticNet(),
+                    {"alpha": [0.1, 1.0, 10.0], "l1_ratio": [0.1, 0.5, 0.9]},
+                ),
+                "decisiontree": (
+                    DecisionTreeRegressor(),
+                    {"max_depth": [None, 10, 20, 30]},
+                ),
+                "randomforest": (
+                    RandomForestRegressor(),
+                    {"n_estimators": [10, 50, 100], "max_depth": [None, 10, 20, 30]},
+                ),
+                "xgboost": (
+                    XGBRegressor(),
+                    {"n_estimators": [10, 50, 100], "learning_rate": [0.01, 0.1, 0.2]},
+                ),
             }
             logging.info(f"Training Different Models\nModels: {list(models.keys())}")
 
             # Report of all the models performance
-            models_report = evaluate_model(X_train, y_train, X_val, y_val, models)
+            models_report = evaluate_model(X_train, y_train, models)
             logging.info(f"Models Performance Report:\n{models_report}")
 
             # Finding the best model:
