@@ -66,7 +66,7 @@ class DataIngestion:
 
             # train test split:
             logging.info("Performing train test split")
-            train_df, test_df = train_test_split(df, test_size=0.3, random_state=21)
+            train_df, test_df = train_test_split(df, test_size=0.2, random_state=45)
 
             # saving train data in artifacts folder:
             train_df_path = os.path.join(
