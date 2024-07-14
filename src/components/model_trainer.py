@@ -6,9 +6,6 @@ from src.logger import logging
 from dataclasses import dataclass
 import pandas as pd
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
 from src.utils import model_trainer, save_object
 import warnings
 
@@ -29,7 +26,7 @@ class ModelTrainer:
     def initiate_model_training(
         self, preprocessed_train_df: pd.DataFrame, raw_data_path: Path
     ):
-        logging.info("Initiating Model Trainer")
+        logging.info("Model Training Initiated")
         try:
             # Getting Transformed Train and Test Data:
             logging.info(
@@ -44,18 +41,6 @@ class ModelTrainer:
                 "elasticnet": (
                     ElasticNet(),
                     {"alpha": [0.1, 1.0, 10.0], "l1_ratio": [0.1, 0.5, 0.9]},
-                ),
-                "decisiontree": (
-                    DecisionTreeRegressor(),
-                    {"max_depth": [None, 10, 20, 30]},
-                ),
-                "randomforest": (
-                    RandomForestRegressor(),
-                    {"n_estimators": [10, 50, 100], "max_depth": [None, 10, 20, 30]},
-                ),
-                "xgboost": (
-                    XGBRegressor(),
-                    {"n_estimators": [10, 50, 100], "learning_rate": [0.01, 0.1, 0.2]},
                 ),
             }
             logging.info(f"Training Different Models\nModels: {list(models.keys())}")
