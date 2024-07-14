@@ -6,7 +6,8 @@ from src.logger import logging
 from src.exception import CustomException
 import pandas as pd
 import pickle
-# from sklearn.model_selection import KFold, cross_val_score
+from sklearn.model_selection import KFold, GridSearchCV
+from sklearn.metrics import r2_score
 
 
 # saving whether a model or a preprocessing object:
@@ -65,3 +66,58 @@ def categoric_col_order() -> Tuple[List[str], List[str], List[str]]:
     clarity_order = ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"]
 
     return (cut_order, color_order, clarity_order)
+
+
+# Training different ML models and finding the best suit model for the data:
+def model_trainer(
+    train_data: pd.DataFrame, models: dict, n_splits: int
+) -> pd.DataFrame:
+    """
+    * This function will train different models and create a
+    performance dataframe of all the models
+    * Output is a dataframe with columns
+    [model_name, model, R2Score]"""
+
+    # kfold cross validation:
+    kfold = KFold(n_splits=n_splits, shuffle=True, random_state=45)
+
+    trained_model_name = []
+    trained_model = []
+    r2score = []
+
+    for train_index, val_index in kfold.split(train_data):
+        train, validation = train_data.iloc[train_index], train_data.iloc[val_index]
+
+        X_train = train.drop("price", axis=1)
+        y_train = train["price"]
+        X_val = validation.drop("price", axis=1)
+        y_val = validation["price"]
+
+        for name, (model, params) in models.items():
+            if params:
+                grid_search = GridSearchCV(
+                    estimator=model, param_grid=params, scoring="r2"
+                )
+                grid_search.fit(X_train, y_train)
+                best_model = grid_search.best_estimator_
+            else:
+                model.fit(X_train, y_train)
+                best_model = model
+
+            y_pred = best_model.predict(X_val)
+            R2 = r2_score(y_val, y_pred)
+
+            trained_model_name.append(name)
+            trained_model.append(best_model)
+            r2score.append(R2)
+
+    performance = pd.DataFrame()
+    performance["model_name"] = trained_model_name
+    performance["model"] = trained_model
+    performance["R2Score"] = r2score
+
+    performance_df = performance.sort_values(by="R2Score", ascending=False).reset_index(
+        drop=True
+    )
+
+    return performance_df
