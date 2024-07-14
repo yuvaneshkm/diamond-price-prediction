@@ -4,12 +4,12 @@ from pathlib import Path
 from src.exception import CustomException
 from src.logger import logging
 from dataclasses import dataclass
+import pandas as pd
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
-from sklearn.model_selection import train_test_split
-from src.utils import evaluate_model, save_object
+from src.utils import model_trainer, save_object
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -26,18 +26,15 @@ class ModelTrainer:
     def __init__(self):
         self.model_trainer_config = ModelTrainerConfig()
 
-    def initiate_model_training(self, pre_train_df, raw_data_path: Path):
+    def initiate_model_training(
+        self, preprocessed_train_df: pd.DataFrame, raw_data_path: Path
+    ):
         logging.info("Initiating Model Trainer")
         try:
             # Getting Transformed Train and Test Data:
-            logging.info(f"Getting Transformed Train Data\n{pre_train_df.head()}")
-
-            # Splitting train and test data into Dependent and Independent Variables:
             logging.info(
-                "Splitting the Train and Test data into Independent(X) and Dependent(y) Variables"
+                f"Getting Transformed Train Data\n{preprocessed_train_df.head()}"
             )
-            X_train = pre_train_df.drop("price", axis=1)
-            y_train = pre_train_df["price"]
 
             # Models to be used:
             models = {
@@ -64,30 +61,20 @@ class ModelTrainer:
             logging.info(f"Training Different Models\nModels: {list(models.keys())}")
 
             # Report of all the models performance
-            models_report = evaluate_model(X_train, y_train, models)
+            models_report = model_trainer(preprocessed_train_df, models, 10)
             logging.info(f"Models Performance Report:\n{models_report}")
 
-            # Finding the best model:
-            logging.info("Finding the best model")
-            best_model_name = (
-                models_report.sort_values(by="r2_score", ascending=False)
-                .reset_index(drop=True)
-                .loc[0, "ModelName"]
-            )
-            best_model = (
-                models_report.sort_values(by="r2_score", ascending=False)
-                .reset_index(drop=True)
-                .loc[0, "Model"]
-            )
-            logging.info(f"The Best Model is: {best_model_name}")
+            # choosing the best model:
+            best_model_name = models_report.loc[0, "model_name"]
+            logging.info(f"The best model is: {best_model_name}")
+            best_model = models_report.loc[0, "model"]
 
-            # saving the best model:
-            logging.info("Saving the best model as a pickle file in artifacts folder")
+            # saving the best model to the artifacts folder:
+            logging.info("Saving the best model")
             directory = Path(os.path.dirname(raw_data_path))
             save_object(
                 directory, self.model_trainer_config.trained_model_file_name, best_model
             )
-            logging.info("Model Training Completed")
 
         except Exception as ex:
             logging.info(CustomException(ex))
