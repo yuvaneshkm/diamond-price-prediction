@@ -29,6 +29,7 @@ class DataTransformation:
     # Get Data Transformation:
     def get_data_transformer(self, raw_data_path: Path):
         """This method will return the Preprocessing object"""
+
         try:
             # data transformation:
             logging.info("Creating Data Preprocessor")
@@ -36,7 +37,7 @@ class DataTransformation:
             # get numeric and categoric columns:
             logging.info("Getting Numeric and Categoric columns")
             num_cols, cate_cols = numeric_categoric_columns(raw_data_path)
-            logging.info("Catrgorical columns order")
+            logging.info("Getting catrgorical columns order")
             cut_order, color_order, clarity_order = categoric_col_order()
 
             # Preprocessor Pipeline construction:
@@ -79,6 +80,9 @@ class DataTransformation:
     def initiate_data_transformation(
         self, raw_data_path: Path, train_data_path: Path, test_data_path: Path
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """
+        * The Output of the method is (preprocessed_train_df, preprocessed_test_df)"""
+
         logging.info("Data Transformation Started")
         try:
             # loading train and test data:
@@ -91,6 +95,7 @@ class DataTransformation:
             # get preprocessing object:
             logging.info("Loading Preprocessor object")
             preprocessor_obj = self.get_data_transformer(raw_data_path)
+            logging.info("Preprocessor object Loaded")
 
             # Train data --> Dependent and Independent features:
             logging.info("Split Dependent and Independent variable of Train Data")
@@ -116,6 +121,8 @@ class DataTransformation:
             )
             logging.info(f"Preprocessed Test data\n{preprocessed_test_df.head()}")
 
+            logging.info("Data Preprocessing completed")
+
             # save the preprocessor object in artifact folder:
             directory = Path(os.path.dirname(raw_data_path))
             save_object(
@@ -125,7 +132,7 @@ class DataTransformation:
             )
             logging.info("Saved the Preprocessor Object to the artifacts folder")
 
-            return (preprocessed_train_df, preprocessed_test_df)
-
         except Exception as ex:
             logging.info(CustomException(ex))
+
+        return (preprocessed_train_df, preprocessed_test_df)
