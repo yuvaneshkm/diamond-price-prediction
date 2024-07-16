@@ -88,8 +88,3 @@ class DataIngestion:
             logging.info(CustomException(ex))
 
         return (raw_df_path, train_df_path, test_df_path)
-
-
-if __name__ == "__main__":
-    obj = DataIngestion()
-    print(obj.initiate_data_ingestion())
