@@ -71,10 +71,10 @@ class DataTransformation:
             preprocessor.set_output(transform="pandas")
             logging.info("Final Preprocessor Pipeline Constructed")
 
-            return preprocessor
-
         except Exception as ex:
             logging.info(CustomException(ex))
+
+        return preprocessor
 
     # Initiate Data Transformation:
     def initiate_data_transformation(

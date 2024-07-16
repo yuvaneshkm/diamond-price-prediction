@@ -10,41 +10,49 @@ from src.logger import logging
 from src.utils import load_object
 
 
-class PredictionPipeline:
+def predict(diamond_data: pd.DataFrame):
 
-    def __init__(self):
-        pass
+    # path of the preprocessor and the model:
+    preprocessor_path = Path(
+        os.path.abspath(os.path.join(os.getcwd(), "../../artifacts/preprocessor.pkl"))
+    )
+    model_path = Path(
+        os.path.abspath(os.path.join(os.getcwd(), "../../artifacts/model.pkl"))
+    )
 
-    def predict(self, features:pd.DataFrame):
-        try:
-            # path of the preprocessor and the model:
-            preprocessor_path = Path(
-                os.path.abspath(os.path.join(os.getcwd(), "../../artifacts/preprocessor.pkl"))
-            )
-            model_path = Path(
-                os.path.abspath(os.path.join(os.getcwd(), "../../artifacts/model.pkl"))
-            )
+    # loading the preprocessor and the model:
+    preprocessor = load_object(preprocessor_path)
+    model = load_object(model_path)
 
-            # loading the preprocessor and the model:
-            preprocessor = load_object(preprocessor_path)
-            model = load_object(model_path)
+    preprocessed_features = preprocessor.transform(diamond_data)
+    price = model.predict(preprocessed_features)
 
-            preprocessed_features = preprocessor.transform(features)
-            predicted_price = model.predict(preprocessed_features)
+    return price
 
-        except Exception as ex:
-            logging.info(CustomException(ex))
-        
-        return predicted_price
-    
 
-class CustomData:
+def custom_data(
+    carat: float,
+    depth: float,
+    table: float,
+    x: float,
+    y: float,
+    z: float,
+    cut: object,
+    color: object,
+    clarity: object
+) -> pd.DataFrame:
 
-    def __init__(self):
-        pass
+    diamond_details = {
+        "carat": [carat],
+        "cut": [cut],
+        "color": [color],
+        "clarity": [clarity],
+        "depth": [depth],
+        "table": [table],
+        "x": [x],
+        "y": [y],
+        "z": [z]
+    }
+    diamond_details_df = pd.DataFrame(diamond_details)
 
-    def get_data_as_dataframe(self):
-        try:
-            pass
-        except Exception as ex:
-            logging.info(CustomData(ex))
+    return diamond_details_df
