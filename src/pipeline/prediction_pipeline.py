@@ -1,4 +1,6 @@
 # Importing necessary libraries:
+import os
+from pathlib import Path
 import pandas as pd
 from src.exception import CustomException
 from src.logger import logging
@@ -57,18 +59,24 @@ class PredictionPipeline:
 
         # preprocessor and model path:
         try:
-            preprocessor_name = "preprocessor.pkl"
-            model_name = "model.pkl"
+
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            base_dir = os.path.join(os.path.dirname(script_dir), "../")
+            artifacts_dir = os.path.join(base_dir, "artifacts")
+
+            preprocessor_path = Path(artifacts_dir) / "preprocessor.pkl"
+            model_path = Path(artifacts_dir) / "model.pkl"
 
             # loading preprocessor and model:
             logging.info("Loading Preprocessor and Model object")
-            data_preprocessor = load_object(preprocessor_name)
+            data_preprocessor = load_object(preprocessor_path)
             logging.info("Preprocessor Object Loaded")
-            ml_model = load_object(model_name)
+            ml_model = load_object(model_path)
             logging.info("Model object loaded")
 
             logging.info("Data Preprocessing")
             preprocessed_diamond_detail = data_preprocessor.transform(diamond_detail)
+            logging.info(f"Preprocessing completed:\n{preprocessed_diamond_detail}")
             logging.info("Diamond Price Prediction")
             predicted_price = ml_model.predict(preprocessed_diamond_detail)
             logging.info(f"The Predicted price is {predicted_price[0]}")
