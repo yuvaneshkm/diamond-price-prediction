@@ -19,7 +19,6 @@ def save_object(directory: Path, filename: str, object):
         filepath = os.path.join(directory, filename)
         with open(filepath, "wb") as file_obj:
             pickle.dump(object, file_obj)
-        file_obj.close()
     except Exception as ex:
         logging.info(CustomException(ex))
 
