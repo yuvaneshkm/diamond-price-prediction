@@ -22,17 +22,17 @@ st.subheader("Diamond Details")
 col1, col2, col3 = st.columns(3, gap="small")
 
 with col1:
-    carat = st.number_input("Diamond Carat", min_value=0.00, max_value=5.00, step=0.1)
+    carat = st.number_input("Diamond Carat")
     clarity = st.selectbox("Diamond Clarity", clarity_order)
-    x = st.number_input("Dimension X", min_value=0.00, max_value=12.00, step=0.01)
+    x = st.number_input("Dimension X")
 with col2:
     cut = st.selectbox("Diamond Cut", cut_order)
-    depth = st.number_input("Diamond Depth", min_value=40.00, max_value=80.00, step=0.1)
-    y = st.number_input("Dimension Y", min_value=0.00, max_value=12.00, step=0.01)
+    depth = st.number_input("Diamond Depth")
+    y = st.number_input("Dimension Y")
 with col3:
     color = st.selectbox("Diamond Color", color_order)
-    table = st.number_input("Diamond Table", min_value=40, max_value=85, step=1)
-    z = st.number_input("Dimension Z", min_value=0.00, max_value=32.00, step=0.01)
+    table = st.number_input("Diamond Table")
+    z = st.number_input("Dimension Z")
 
 
 if st.button("Predict Price"):
