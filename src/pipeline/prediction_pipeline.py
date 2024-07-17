@@ -1,11 +1,8 @@
 # Importing necessary libraries:
-import os
-from pathlib import Path
 import pandas as pd
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import load_object
-from dataclasses import dataclass
 
 
 class DataPreparation:
@@ -51,36 +48,23 @@ class DataPreparation:
         return diamond_details_df
 
 
-@dataclass
-class PredictionPipelineConfig:
-    pre_path = os.path.join("artifacts", "preprocessor.pkl")
-    mdl_path = os.path.join("artifacts", "model.pkl")
-
-
 class PredictionPipeline:
 
     def __init__(self):
         logging.info("Prediction Pipeline Initiated")
-        self.prediction_pipeline_config = PredictionPipelineConfig()
 
     def predict(self, diamond_detail: pd.DataFrame):
 
         # preprocessor and model path:
         try:
-            parent_dir = os.path.abspath(os.path.join(os.getcwd(), "../.."))
-
-            preprocessor_path = Path(
-                os.path.join(parent_dir, self.prediction_pipeline_config.pre_path)
-            )
-            model_path = Path(
-                os.path.join(parent_dir, self.prediction_pipeline_config.mdl_path)
-            )
+            preprocessor_name = "preprocessor.pkl"
+            model_name = "model.pkl"
 
             # loading preprocessor and model:
             logging.info("Loading Preprocessor and Model object")
-            data_preprocessor = load_object(preprocessor_path)
+            data_preprocessor = load_object(preprocessor_name)
             logging.info("Preprocessor Object Loaded")
-            ml_model = load_object(model_path)
+            ml_model = load_object(model_name)
             logging.info("Model object loaded")
 
             logging.info("Data Preprocessing")
