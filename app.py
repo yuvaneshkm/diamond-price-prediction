@@ -53,12 +53,8 @@ if st.button("Predict Price"):
         pred_price = PredictionPipeline()
         price = pred_price.predict(details_df)
 
-        if price is not None:
-            st.success(f"Predicted Price: ${price[0]:,.2f}")
-        else:
-            st.error(
-                "Failed to predict the price. Please check the logs for more details."
-            )
+        st.success(f"Predicted Price of the Diamond: ${price[0]:,.2f}")
+        
 
     except Exception as ex:
         logging.info(CustomException(ex))
