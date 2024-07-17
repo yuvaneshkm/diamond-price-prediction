@@ -54,7 +54,6 @@ if st.button("Predict Price"):
         price = pred_price.predict(details_df)
 
         st.success(f"Predicted Price of the Diamond: ${price[0]:,.2f}")
-        
 
     except Exception as ex:
         logging.info(CustomException(ex))
