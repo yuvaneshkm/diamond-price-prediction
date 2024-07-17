@@ -24,11 +24,9 @@ def save_object(directory: Path, filename: str, object):
 
 
 # loading the model or preprocessing object:
-def load_object(filename: str):
+def load_object(filepath: Path):
     """This function will load the ML model and Preprocessing object"""
     try:
-        filedir = os.path.abspath(os.path.join(os.getcwd(), "../artifacts"))
-        filepath = Path(os.path.join(filedir, filename))
         with open(filepath, "rb") as file_obj:
             return pickle.load(file_obj)
     except Exception as ex:
