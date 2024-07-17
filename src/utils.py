@@ -68,7 +68,7 @@ def categoric_col_order() -> Tuple[List[str], List[str], List[str]]:
 
 # Training different ML models and finding the best suit model for the data:
 def model_trainer(
-    train_data: pd.DataFrame, models: dict, n_splits: int
+    train_data: pd.DataFrame, test_data: pd.DataFrame, models: dict, n_splits: int
 ) -> pd.DataFrame:
     """
     * This function will train different models and create a
@@ -81,7 +81,11 @@ def model_trainer(
 
     trained_model_name = []
     trained_model = []
-    r2score = []
+    train_r2score = []
+    test_r2score = []
+
+    X_test = test_data.drop("price", axis=1)
+    y_test = test_data["price"]
 
     for train_index, val_index in kfold.split(train_data):
         train, validation = train_data.iloc[train_index], train_data.iloc[val_index]
@@ -102,20 +106,25 @@ def model_trainer(
                 model.fit(X_train, y_train)
                 best_model = model
 
-            y_pred = best_model.predict(X_val)
-            R2 = r2_score(y_val, y_pred)
+            y_val_pred = best_model.predict(X_val)
+            train_R2 = r2_score(y_val, y_val_pred)
+
+            y_test_pred = best_model.predict(X_test)
+            test_R2 = r2_score(y_test, y_test_pred)
 
             trained_model_name.append(name)
             trained_model.append(best_model)
-            r2score.append(R2)
+            train_r2score.append(train_R2)
+            test_r2score.append(test_R2)
 
     performance = pd.DataFrame()
     performance["model_name"] = trained_model_name
     performance["model"] = trained_model
-    performance["R2Score"] = r2score
+    performance["train_R2Score"] = train_r2score
+    performance["test_R2Score"] = test_r2score
 
-    performance_df = performance.sort_values(by="R2Score", ascending=False).reset_index(
-        drop=True
-    )
+    performance_df = performance.sort_values(
+        by="test_R2Score", ascending=False
+    ).reset_index(drop=True)
 
     return performance_df
