@@ -18,4 +18,4 @@ preprocessed_train_df, preprocessed_test_df = dtobj.initiate_data_transformation
 
 # Model Training
 mtobj = model_trainer.ModelTrainer()
-mtobj.initiate_model_training(preprocessed_train_df, raw_path)
+mtobj.initiate_model_training(preprocessed_train_df, preprocessed_test_df, raw_path)

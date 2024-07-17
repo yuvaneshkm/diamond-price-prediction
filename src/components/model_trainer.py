@@ -24,7 +24,10 @@ class ModelTrainer:
         self.model_trainer_config = ModelTrainerConfig()
 
     def initiate_model_training(
-        self, preprocessed_train_df: pd.DataFrame, raw_data_path: Path
+        self,
+        preprocessed_train_df: pd.DataFrame,
+        preprocessed_test_df: pd.DataFrame,
+        raw_data_path: Path,
     ):
         logging.info("Model Training Initiated")
         try:
@@ -46,7 +49,9 @@ class ModelTrainer:
             logging.info(f"Training Different Models\nModels: {list(models.keys())}")
 
             # Report of all the models performance
-            models_report = model_trainer(preprocessed_train_df, models, 10)
+            models_report = model_trainer(
+                preprocessed_train_df, preprocessed_test_df, models, 10
+            )
             logging.info(f"Models Performance Report:\n{models_report}")
 
             # choosing the best model:
