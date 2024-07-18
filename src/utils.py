@@ -74,7 +74,8 @@ def model_trainer(
     * This function will train different models and create a
     performance dataframe of all the models
     * Output is a dataframe with columns
-    [model_name, model, R2Score]"""
+    [model_name, model, train_R2Score(train_accuracy), R2Score(test_accuracy), MSE, MAE]
+    """
 
     # kfold cross validation:
     kfold = KFold(n_splits=n_splits, shuffle=True, random_state=45)
@@ -85,7 +86,6 @@ def model_trainer(
     r2score_list = []
     mse_list = []
     mae_list = []
-
 
     X_test = test_data.drop("price", axis=1)
     y_test = test_data["price"]
@@ -128,11 +128,11 @@ def model_trainer(
     performance["model_name"] = trained_model_name_list
     performance["model"] = trained_model_list
     performance["R2Score"] = r2score_list
-    performance['MSE'] = mse_list
-    performance['MAE'] = mae_list
+    performance["MSE"] = mse_list
+    performance["MAE"] = mae_list
 
-    performance_df = performance.sort_values(
-        by="R2Score", ascending=False
-    ).reset_index(drop=True)
+    performance_df = performance.sort_values(by="R2Score", ascending=False).reset_index(
+        drop=True
+    )
 
     return performance_df
