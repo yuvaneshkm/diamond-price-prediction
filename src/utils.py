@@ -7,7 +7,7 @@ from src.exception import CustomException
 import pandas as pd
 import pickle
 from sklearn.model_selection import KFold, GridSearchCV
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 
 
 # saving whether a model or a preprocessing object:
@@ -79,10 +79,13 @@ def model_trainer(
     # kfold cross validation:
     kfold = KFold(n_splits=n_splits, shuffle=True, random_state=45)
 
-    trained_model_name = []
-    trained_model = []
-    train_r2score = []
-    test_r2score = []
+    trained_model_name_list = []
+    trained_model_list = []
+    train_r2score_list = []
+    r2score_list = []
+    mse_list = []
+    mae_list = []
+
 
     X_test = test_data.drop("price", axis=1)
     y_test = test_data["price"]
@@ -110,21 +113,26 @@ def model_trainer(
             train_R2 = r2_score(y_val, y_val_pred)
 
             y_test_pred = best_model.predict(X_test)
-            test_R2 = r2_score(y_test, y_test_pred)
+            R2_ = r2_score(y_test, y_test_pred)
+            mse_ = mean_squared_error(y_test, y_test_pred)
+            mae_ = mean_absolute_error(y_test, y_test_pred)
 
-            trained_model_name.append(name)
-            trained_model.append(best_model)
-            train_r2score.append(train_R2)
-            test_r2score.append(test_R2)
+            trained_model_name_list.append(name)
+            trained_model_list.append(best_model)
+            train_r2score_list.append(train_R2)
+            r2score_list.append(R2_)
+            mse_list.append(mse_)
+            mae_list.append(mae_)
 
     performance = pd.DataFrame()
-    performance["model_name"] = trained_model_name
-    performance["model"] = trained_model
-    performance["train_R2Score"] = train_r2score
-    performance["test_R2Score"] = test_r2score
+    performance["model_name"] = trained_model_name_list
+    performance["model"] = trained_model_list
+    performance["R2Score"] = r2score_list
+    performance['MSE'] = mse_list
+    performance['MAE'] = mae_list
 
     performance_df = performance.sort_values(
-        by="test_R2Score", ascending=False
+        by="R2Score", ascending=False
     ).reset_index(drop=True)
 
     return performance_df
