@@ -69,8 +69,8 @@ class ModelEvaluation:
             (mse, mae, r2) = self.evaluate_metrics(y_test, y_pred)
 
             # set the remote server uri for tracking and model registry:
-            # remote_server_uri = ""
-            # mlflow.set_tracking_uri(remote_server_uri)
+            #tracking_uri = ""
+            #mlflow.set_tracking_uri(tracking_uri)
 
             # start the mlflow run:
             with mlflow.start_run():
