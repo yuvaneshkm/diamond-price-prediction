@@ -1,6 +1,11 @@
 # Importing necessary packages
 from pathlib import Path
-from src.components import data_ingestion, data_transformation, model_trainer
+from src.components import (
+    data_ingestion,
+    data_transformation,
+    model_trainer,
+    model_evaluation,
+)
 
 # Data Ingestion
 diobj = data_ingestion.DataIngestion()
@@ -19,3 +24,7 @@ preprocessed_train_df, preprocessed_test_df = dtobj.initiate_data_transformation
 # Model Training
 mtobj = model_trainer.ModelTrainer()
 mtobj.initiate_model_training(preprocessed_train_df, preprocessed_test_df, raw_path)
+
+# Model Evaluation:
+meobj = model_evaluation.ModelEvaluation()
+meobj.initiate_model_evaluation(preprocessed_test_df)
