@@ -56,4 +56,4 @@ with form:
             st.success(f"Predicted Price of the Diamond: $ {price[0]:,.2f}")
 
         except Exception as ex:
-            logging.info(CustomException(ex))
+            raise CustomException(ex)
