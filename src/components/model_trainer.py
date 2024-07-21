@@ -67,4 +67,4 @@ class ModelTrainer:
             )
 
         except Exception as ex:
-            logging.info(CustomException(ex))
+            raise CustomException(ex)

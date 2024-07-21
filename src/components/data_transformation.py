@@ -72,7 +72,7 @@ class DataTransformation:
             logging.info("Final Preprocessor Pipeline Constructed")
 
         except Exception as ex:
-            logging.info(CustomException(ex))
+            raise CustomException(ex)
 
         return preprocessor
 
@@ -133,6 +133,6 @@ class DataTransformation:
             logging.info("Saved the Preprocessor Object to the artifacts folder")
 
         except Exception as ex:
-            logging.info(CustomException(ex))
+            raise CustomException(ex)
 
         return (preprocessed_train_df, preprocessed_test_df)

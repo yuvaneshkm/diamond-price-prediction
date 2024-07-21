@@ -24,5 +24,5 @@ if __name__ == "__main__":
     try:
         print("Hello")
         9 / 0
-    except Exception as e:
-        logging.info(CustomException(e))
+    except Exception as ex:
+        raise CustomException(ex)

@@ -82,6 +82,6 @@ class PredictionPipeline:
             logging.info(f"The Predicted price is {predicted_price[0]}")
 
         except Exception as ex:
-            logging.info(CustomException(ex))
+            raise CustomException(ex)
 
         return predicted_price

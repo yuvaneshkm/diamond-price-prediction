@@ -2,7 +2,6 @@
 import os
 from pathlib import Path
 from typing import List, Tuple
-from src.logger import logging
 from src.exception import CustomException
 import pandas as pd
 import pickle
@@ -20,7 +19,7 @@ def save_object(directory: Path, filename: str, object):
         with open(filepath, "wb") as file_obj:
             pickle.dump(object, file_obj)
     except Exception as ex:
-        logging.info(CustomException(ex))
+        raise CustomException(ex)
 
 
 # loading the model or preprocessing object:
@@ -30,7 +29,7 @@ def load_object(filepath: Path):
         with open(filepath, "rb") as file_obj:
             return pickle.load(file_obj)
     except Exception as ex:
-        logging.info(CustomException(ex))
+        raise CustomException(ex)
 
 
 # numeric and categoric columns:
