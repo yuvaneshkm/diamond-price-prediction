@@ -6,6 +6,10 @@ from src.components import (
     model_trainer,
     model_evaluation,
 )
+import warnings
+
+warnings.filterwarnings("ignore")
+
 
 # Data Ingestion
 diobj = data_ingestion.DataIngestion()

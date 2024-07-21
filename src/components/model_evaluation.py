@@ -10,6 +10,9 @@ from src.logger import logging
 from src.exception import CustomException
 from src.utils import load_object
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 class ModelEvaluation:
