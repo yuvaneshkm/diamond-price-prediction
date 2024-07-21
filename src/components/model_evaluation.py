@@ -45,7 +45,7 @@ class ModelEvaluation:
         logging.info("Model Evaluation Initiated")
         try:
             logging.info("Test data imported")
-            X_test = test_data.drop("price")
+            X_test = test_data.drop("price", axis=1)
             y_test = test_data["price"]
 
             # model path:
