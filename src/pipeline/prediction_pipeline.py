@@ -5,6 +5,7 @@ import pandas as pd
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import load_object
+import mlflow
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -66,16 +67,21 @@ class PredictionPipeline:
             script_dir = os.path.dirname(os.path.abspath(__file__))
             base_dir = os.path.join(os.path.dirname(script_dir), "../")
             artifacts_dir = os.path.join(base_dir, "artifacts")
-
+            
+            # loading preprocessor:
             preprocessor_path = Path(artifacts_dir) / "preprocessor.pkl"
-            model_path = Path(artifacts_dir) / "model.pkl"
-
-            # loading preprocessor and model:
-            logging.info("Loading Preprocessor and Model object")
+            logging.info("Loading Preprocessor")
             data_preprocessor = load_object(preprocessor_path)
             logging.info("Preprocessor Object Loaded")
-            ml_model = load_object(model_path)
-            logging.info("Model object loaded")
+
+            # loading the production model:
+            remote_server_uri = "https://dagshub.com/yuvaneshkm/diamond-price-prediction.mlflow"
+            mlflow.set_tracking_uri(remote_server_uri)
+            model_name = "diamond-price-predictor"
+
+            ml_model = mlflow.pyfunc.load_model(
+                model_uri = f"models:/{model_name}/Production"
+            )
 
             logging.info("Data Preprocessing")
             preprocessed_diamond_detail = data_preprocessor.transform(diamond_detail)
