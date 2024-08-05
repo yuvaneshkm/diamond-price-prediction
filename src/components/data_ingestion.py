@@ -4,7 +4,7 @@ from typing import Tuple
 from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
-from mdb_connect_pkg import mongo_crud
+from dbsconnector import databases
 from sklearn.model_selection import train_test_split
 import warnings
 
@@ -35,21 +35,7 @@ class DataIngestion:
         logging.info("Data Ingestion Started")
         try:
             # Initializing mongodb connector:
-            logging.info("Initializing mongodb connector")
-            URL = "mongodb://localhost:27017"
-            DATABASE_NAME = "projectdb"
-            COLLECTION_NAME = "diamond_price_data"
-            mongo = mongo_crud.MongoDBConnection(URL, DATABASE_NAME, COLLECTION_NAME)
-
-            # Creating mongodb client:
-            logging.info("Creating mongodb client")
-            mongo.create_mongo_client()
-            mongo.database_()
-            mongo.collection_()
-
-            # Loading data from mongodb:
-            logging.info("Loading data from mongodb")
-            df = mongo.load_data()
+            df = databases.load_gsheet("1TzMe3bHBVclnm-a7o-Yh9XqPLA9Hwr8NDC79w48mT38", "diamond_price_data")
             df.drop("id", axis=1, inplace=True)
 
             # creating artifact directory:

@@ -52,14 +52,9 @@ class ModelEvaluation:
             X_test = test_data.drop("price", axis=1)
             y_test = test_data["price"]
 
-            # preprocessor and model path:
+            # model path:
             script_dir = os.path.dirname(os.path.abspath(__name__))
             base_dir = os.path.abspath(os.path.join(script_dir, "../../"))
-            
-            # loading the preprocessor:
-            preprocessor_path = Path(os.path.join(base_dir, "artifacts/preprocessor.pkl"))
-            preprocessor = load_object(preprocessor_path) # preprocessor
-            logging.info("Preprocessor imported")
 
             # loading the model:
             model_path = Path(os.path.join(base_dir, "artifacts/model.pkl"))
@@ -77,6 +72,7 @@ class ModelEvaluation:
             logging.info("Calculating MAE, MSE and R2_Score")
             (mse, mae, r2) = self.evaluate_metrics(y_test, y_pred)
 
+
             # set the remote server uri for tracking and model registry:
             tracking_uri = "https://dagshub.com/yuvaneshkm/diamond-price-prediction.mlflow"
             mlflow.set_tracking_uri(tracking_uri)
@@ -91,10 +87,6 @@ class ModelEvaluation:
                 # logging the parameters:
                 logging.info("Logging Model Parameters to MLflow")
                 mlflow.log_params(model_params)
-
-                # logging the preprocessor object:
-                logging.info("Log the preprocessor object to MLflow")
-                mlflow.log_artifact(preprocessor, artifact_path="preprocessor")
 
                 # type of the tracking uri:
                 tracking_uri_type_store = urlparse(mlflow.get_tracking_uri()).scheme
