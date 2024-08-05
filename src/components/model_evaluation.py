@@ -10,10 +10,14 @@ from src.logger import logging
 from src.exception import CustomException
 from src.utils import load_object
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import dagshub
 import warnings
 
 warnings.filterwarnings("ignore")
 
+# initialise dagshub:
+logging.info("Initialise the dagshub")
+dagshub.init(repo_owner='yuvaneshkm', repo_name='diamond-price-prediction', mlflow=True)
 
 class ModelEvaluation:
 
@@ -48,14 +52,19 @@ class ModelEvaluation:
             X_test = test_data.drop("price", axis=1)
             y_test = test_data["price"]
 
-            # model path:
+            # preprocessor and model path:
             script_dir = os.path.dirname(os.path.abspath(__name__))
             base_dir = os.path.abspath(os.path.join(script_dir, "../../"))
-            model_path = Path(os.path.join(base_dir, "artifacts/model.pkl"))
+            
+            # loading the preprocessor:
+            preprocessor_path = Path(os.path.join(base_dir, "artifacts/preprocessor.pkl"))
+            preprocessor = load_object(preprocessor_path) # preprocessor
+            logging.info("Preprocessor imported")
 
             # loading the model:
+            model_path = Path(os.path.join(base_dir, "artifacts/model.pkl"))
+            model = load_object(model_path)  # model
             logging.info("Model imported")
-            model = load_object(model_path)
 
             # parameters of the model:
             model_params = model.get_params()
@@ -69,8 +78,8 @@ class ModelEvaluation:
             (mse, mae, r2) = self.evaluate_metrics(y_test, y_pred)
 
             # set the remote server uri for tracking and model registry:
-            #tracking_uri = ""
-            #mlflow.set_tracking_uri(tracking_uri)
+            tracking_uri = "https://dagshub.com/yuvaneshkm/diamond-price-prediction.mlflow"
+            mlflow.set_tracking_uri(tracking_uri)
 
             # start the mlflow run:
             with mlflow.start_run():
@@ -82,6 +91,10 @@ class ModelEvaluation:
                 # logging the parameters:
                 logging.info("Logging Model Parameters to MLflow")
                 mlflow.log_params(model_params)
+
+                # logging the preprocessor object:
+                logging.info("Log the preprocessor object to MLflow")
+                mlflow.log_artifact(preprocessor, artifact_path="preprocessor")
 
                 # type of the tracking uri:
                 tracking_uri_type_store = urlparse(mlflow.get_tracking_uri()).scheme
