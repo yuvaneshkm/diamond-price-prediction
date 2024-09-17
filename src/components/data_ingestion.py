@@ -26,7 +26,7 @@ class DataIngestion:
 
     def initiate_data_ingestion(self) -> Tuple[str, str, str]:
         """
-        * This method will ingest data from MongoDB database and split data into
+        * This method will ingest data from Google Drive and split data into
         Train and Test set and store the data in the artifacts folder.
         * The output of this method is a tuple of
         (raw_data_path, train_data_path, test_data_path)
