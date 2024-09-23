@@ -7,9 +7,9 @@ from src.exception import CustomException
 from dbsconnector import databases
 from sklearn.model_selection import train_test_split
 import warnings
+from pathlib import Path
 
 warnings.filterwarnings("ignore")
-
 
 # Inputs related to data_ingestion component:
 @dataclass
@@ -40,39 +40,37 @@ class DataIngestion:
             )
             df.drop("id", axis=1, inplace=True)
 
-            # creating artifact directory:
-            parent_dir = os.path.abspath(os.path.join(os.getcwd(), "../.."))
-            artifact_dir = os.path.join(
-                parent_dir, os.path.dirname(self.ingestion_config.raw_data_path)
-            )
-            os.makedirs(artifact_dir, exist_ok=True)
+            # Ensuring the artifacts directory exists:
+            artifact_dir = Path(self.ingestion_config.raw_data_path).parent
+            artifact_dir.mkdir(parents=True, exist_ok=True)
 
-            # saving raw data in artifacts folder:
-            raw_df_path = os.path.join(parent_dir, self.ingestion_config.raw_data_path)
+            # Saving raw data in artifacts folder:
+            raw_df_path = Path(self.ingestion_config.raw_data_path)
             df.to_csv(raw_df_path, index=False)
-            logging.info("Saved raw data in artifact folder")
+            logging.info(f"Saved raw data to {raw_df_path}")
 
-            # train test split:
+            # Performing train test split:
             logging.info("Performing train test split")
             train_df, test_df = train_test_split(df, test_size=0.3, random_state=45)
 
-            # saving train data in artifacts folder:
-            train_df_path = os.path.join(
-                parent_dir, self.ingestion_config.train_data_path
-            )
+            # Saving train data in artifacts folder:
+            train_df_path = Path(self.ingestion_config.train_data_path)
             train_df.to_csv(train_df_path, index=False)
-            logging.info("Saved train data in artifact folder")
+            logging.info(f"Saved train data to {train_df_path}")
 
-            # saving test data in artifacts folder:
-            test_df_path = os.path.join(
-                parent_dir, self.ingestion_config.test_data_path
-            )
+            # Saving test data in artifacts folder:
+            test_df_path = Path(self.ingestion_config.test_data_path)
             test_df.to_csv(test_df_path, index=False)
-            logging.info("Saved test data in artifact folder")
+            logging.info(f"Saved test data to {test_df_path}")
 
             logging.info("Data Ingestion Completed")
 
         except Exception as ex:
             raise CustomException(ex)
 
-        return (raw_df_path, train_df_path, test_df_path)
+        return (str(raw_df_path), str(train_df_path), str(test_df_path))
+
+
+if __name__=="__main__":
+    obj = DataIngestion()
+    obj.initiate_data_ingestion()
