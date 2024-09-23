@@ -1,6 +1,7 @@
-# files:
+# files and folders:
 data-description.txt
 experiments.py
+artifacts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
