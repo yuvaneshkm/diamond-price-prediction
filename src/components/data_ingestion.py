@@ -35,7 +35,9 @@ class DataIngestion:
         logging.info("Data Ingestion Started")
         try:
             # Initializing mongodb connector:
-            df = databases.load_gsheet("1TzMe3bHBVclnm-a7o-Yh9XqPLA9Hwr8NDC79w48mT38", "diamond_price_data")
+            df = databases.load_mongodbdata(
+                host="localhost", database="diamond-price-data", collection="raw-data"
+            )
             df.drop("id", axis=1, inplace=True)
 
             # creating artifact directory:
@@ -52,7 +54,7 @@ class DataIngestion:
 
             # train test split:
             logging.info("Performing train test split")
-            train_df, test_df = train_test_split(df, test_size=0.25, random_state=25)
+            train_df, test_df = train_test_split(df, test_size=0.3, random_state=45)
 
             # saving train data in artifacts folder:
             train_df_path = os.path.join(
