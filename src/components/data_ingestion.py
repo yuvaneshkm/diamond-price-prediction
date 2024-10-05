@@ -4,7 +4,7 @@ from typing import Tuple
 from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
-from dbsconnector import databases
+from dbsconnector.databases import MongoDB
 from sklearn.model_selection import train_test_split
 import warnings
 from pathlib import Path
@@ -35,9 +35,10 @@ class DataIngestion:
         logging.info("Data Ingestion Started")
         try:
             # Initializing mongodb connector:
-            df = databases.load_mongodbdata(
-                host="localhost", database="diamond-price-data", collection="raw-data"
-            )
+            mongo_obj = MongoDB(host_url="mongodb://localhost:27017")
+
+            # loading the raw data
+            df = mongo_obj.load_data(database="diamond-price-data", collection_name="raw-data")
             df.drop("id", axis=1, inplace=True)
 
             # Ensuring the artifacts directory exists:
@@ -53,7 +54,9 @@ class DataIngestion:
             logging.info("Performing train test split")
             train_df, test_df = train_test_split(df, test_size=0.3, random_state=45)
 
-            # Saving train data in artifacts folder:
+            # -----------------------------------------------------------------------------------
+
+            # Saving train data to mongodb:
             train_df_path = Path(self.ingestion_config.train_data_path)
             train_df.to_csv(train_df_path, index=False)
             logging.info(f"Saved train data to {train_df_path}")

@@ -8,6 +8,10 @@ import pickle
 from sklearn.model_selection import KFold, GridSearchCV
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 
+# data versioning:
+def data_versioning():
+    pass
+
 
 # saving whether a model or a preprocessing object:
 def save_object(directory: Path, filename: str, object):

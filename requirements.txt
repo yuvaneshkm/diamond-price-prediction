@@ -2,7 +2,7 @@ pandas==2.2.2
 matplotlib==3.9.1
 seaborn==0.13.2
 scikit-learn==1.5.0
-dbsconnector==1.1
+dbsconnector==1.4
 streamlit==1.36.0
 mlflow==2.14.3
 dagshub==0.3.34
