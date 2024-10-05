@@ -9,8 +9,6 @@ from src.components import (
     model_evaluation,
 )
 from src.exception import CustomException
-import pandas as pd
-from typing import Dict
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -50,7 +48,7 @@ with DAG(
     """
 
     @task
-    def start_data_ingestion() -> Dict[str, str]:
+    def start_data_ingestion():
         try:
             raw_data_path, train_data_path, test_data_path = (
                 di_obj.initiate_data_ingestion()
@@ -64,9 +62,7 @@ with DAG(
         }
 
     @task
-    def start_data_transformation(
-        data_ingestion_artifact: dict,
-    ) -> Dict[str, pd.DataFrame]:
+    def start_data_transformation(data_ingestion_artifact):
         try:
             raw_path = data_ingestion_artifact["raw_path"]
             train_path = data_ingestion_artifact["train_path"]
@@ -82,9 +78,7 @@ with DAG(
         }
 
     @task
-    def start_model_training(
-        data_ingestion_artifact: dict, data_transformation_artifact: dict
-    ):
+    def start_model_training(data_ingestion_artifact, data_transformation_artifact):
         try:
             raw_path = data_ingestion_artifact["raw_path"]
             pre_train_df = data_transformation_artifact["pre_train_df"]
@@ -94,7 +88,7 @@ with DAG(
             raise CustomException(ex)
 
     @task
-    def start_model_evaluation(data_transformation_artifact: dict):
+    def start_model_evaluation(data_transformation_artifact):
         try:
             pre_test_df = data_transformation_artifact["pre_test_df"]
             me_obj.initiate_model_evaluation(pre_test_df)
@@ -103,9 +97,11 @@ with DAG(
 
     # defining the tasks:
     data_ingestion_task = start_data_ingestion()
-    data_transformation_task = start_data_transformation(data_ingestion_task)  # type: ignore
-    model_training_task = start_model_training(data_ingestion_task, data_transformation_task)  # type: ignore
-    model_evaluation_task = start_model_evaluation(data_transformation_task)  # type: ignore
+    data_transformation_task = start_data_transformation(data_ingestion_task)
+    model_training_task = start_model_training(
+        data_ingestion_task, data_transformation_task
+    )
+    model_evaluation_task = start_model_evaluation(data_transformation_task)
 
     # task flow:
     (
