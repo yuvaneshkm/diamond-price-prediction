@@ -15,7 +15,6 @@ warnings.filterwarnings("ignore")
 # Inputs related to data_ingestion component:
 @dataclass
 class DataIngestionConfig:
-    raw_data_path = os.path.join("artifacts", "raw.csv")
     train_data_path = os.path.join("artifacts", "train.csv")
     test_data_path = os.path.join("artifacts", "test.csv")
 
@@ -43,13 +42,8 @@ class DataIngestion:
             df.drop("id", axis=1, inplace=True)
 
             # Ensuring the artifacts directory exists:
-            artifact_dir = Path(self.ingestion_config.raw_data_path).parent
+            artifact_dir = Path(self.ingestion_config.train_data_path).parent
             artifact_dir.mkdir(parents=True, exist_ok=True)
-
-            # Saving raw data in artifacts folder:
-            raw_df_path = Path(self.ingestion_config.raw_data_path)
-            df.to_csv(raw_df_path, index=False)
-            logging.info(f"Saved raw data to {raw_df_path}")
 
             # Performing train test split:
             logging.info("Performing train test split")
@@ -74,7 +68,7 @@ class DataIngestion:
         except Exception as ex:
             raise CustomException(ex)
 
-        return (str(raw_df_path), str(train_df_path), str(test_df_path))
+        return (str(train_df_path), str(test_df_path))
 
 
 if __name__=="__main__":
