@@ -1,5 +1,6 @@
 # Importing necessary libraries:
 import os
+import subprocess
 from pathlib import Path
 from typing import List, Tuple
 from src.exception import CustomException
@@ -9,8 +10,15 @@ from sklearn.model_selection import KFold, GridSearchCV
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 
 # data versioning:
-def data_versioning():
-    pass
+def data_versioning(filepath:str, commit_message:str):
+    # add files to dvc tracking:
+    subprocess.run(['dvc','add',filepath], check=True)
+    # commit the dvc change:
+    subprocess.run(['git','add','.'], check=True)
+    subprocess.run(['git','commit','-m',commit_message], check=True)
+    # push the data to the dvc remote storage:
+    subprocess.run(['dvc','push','-r','origin'], check=True)
+    subprocess.run(['git','push','-u','origin','main'], check=True)
 
 
 # saving whether a model or a preprocessing object:
