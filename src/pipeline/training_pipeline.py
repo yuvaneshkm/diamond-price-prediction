@@ -17,6 +17,7 @@ class TrainingPipeline:
 
     # data ingestion:
     def start_data_ingestion(self):
+        '''return (raw_data_path, train_data_path, test_data_path)'''
         try:
             data_ingestion_obj = data_ingestion.DataIngestion()
             raw_data_path, train_data_path, test_data_path = (
