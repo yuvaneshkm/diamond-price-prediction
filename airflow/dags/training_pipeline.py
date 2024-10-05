@@ -103,7 +103,7 @@ with DAG(
     )
     model_evaluation_task = start_model_evaluation(data_transformation_task)
 
-    # task flow:
+    # task execution flow:
     (
         data_ingestion_task
         >> data_transformation_task
