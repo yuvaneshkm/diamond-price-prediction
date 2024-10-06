@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore")
 
 @dataclass
 class ModelTrainerConfig:
-    trained_model_file_name = "model.pkl"
+    trained_model_path = os.path.join("artifacts", "model.pkl")
 
 
 # Model trainer:
@@ -27,7 +27,6 @@ class ModelTrainer:
         self,
         preprocessed_train_df: pd.DataFrame,
         preprocessed_test_df: pd.DataFrame,
-        raw_data_path: Path,
     ):
         logging.info("Model Training Initiated")
         try:
@@ -61,10 +60,10 @@ class ModelTrainer:
 
             # saving the best model to the artifacts folder:
             logging.info("Saving the best model")
-            directory = Path(os.path.dirname(raw_data_path))
-            save_object(
-                directory, self.model_trainer_config.trained_model_file_name, best_model
-            )
+            model_path = Path(self.model_trainer_config.trained_model_path)
+            save_object(model_path, best_model)
+            # 
+            
 
         except Exception as ex:
             raise CustomException(ex)
