@@ -1,5 +1,6 @@
 # Importing necessary libraries:
 import os
+import sys
 from typing import Tuple
 from dataclasses import dataclass
 from src.logger import logging
@@ -38,7 +39,7 @@ class DataIngestion:
             mongo_obj = MongoDB(host_url="mongodb://localhost:27017")
 
             # loading the raw data
-            df = mongo_obj.load_data(database="diamond-price-data", collection_name="raw-data")
+            df = mongo_obj.load_data(database="diamond-price-prediction-db", collection_name="diamond-data")
             df.drop("id", axis=1, inplace=True)
 
             # Ensuring the artifacts directory exists:
