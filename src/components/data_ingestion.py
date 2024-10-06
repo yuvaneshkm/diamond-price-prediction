@@ -24,7 +24,7 @@ class DataIngestion:
     def __init__(self):
         self.ingestion_config = DataIngestionConfig()
 
-    def initiate_data_ingestion(self) -> Tuple[str, str, str]:
+    def initiate_data_ingestion(self) -> Tuple[str, str]:
         """
         * This method will ingest data from Google Drive and split data into
         Train and Test set and store the data in the artifacts folder.
@@ -55,6 +55,7 @@ class DataIngestion:
             logging.info(f"Saved train data to {train_df_path}")
             # tracking the train data using dvc:
             data_versioning(str(train_df_path), "versioning_train_data")
+            logging.info("Versioned the train data using DVC")
 
             # Saving test data in artifacts folder:
             test_df_path = Path(self.ingestion_config.test_data_path)
@@ -62,11 +63,15 @@ class DataIngestion:
             logging.info(f"Saved test data to {test_df_path}")
             # tracking the train data using dvc:
             data_versioning(str(test_df_path), "versioning_test_data")
+            logging.info("Versioned the test data using DVC")
 
             logging.info("Data Ingestion Completed")
 
+            print("hello")
+
         except Exception as ex:
             raise CustomException(ex)
+        print("world")
 
         return (str(train_df_path), str(test_df_path))
 
