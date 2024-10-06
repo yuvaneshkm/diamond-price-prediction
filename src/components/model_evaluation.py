@@ -45,19 +45,15 @@ class ModelEvaluation:
 
         return (MSE, MAE, R2_Score)
 
-    def initiate_model_evaluation(self, test_data: pd.DataFrame):
+    def initiate_model_evaluation(self, test_data: pd.DataFrame, model_path:str):
         logging.info("Model Evaluation Initiated")
         try:
             logging.info("Test data imported")
             X_test = test_data.drop("price", axis=1)
             y_test = test_data["price"]
 
-            # model path:
-            script_dir = os.path.dirname(os.path.abspath(__name__))
-            base_dir = os.path.abspath(os.path.join(script_dir, "../../"))
-
             # loading the model:
-            model_path = Path(os.path.join(base_dir, "artifacts/model.pkl"))
+            model_path = Path(model_path)
             model = load_object(model_path)  # model
             logging.info("Model imported")
 

@@ -27,7 +27,8 @@ class ModelTrainer:
         self,
         preprocessed_train_df: pd.DataFrame,
         preprocessed_test_df: pd.DataFrame,
-    ):
+    ) -> Path:
+        '''The output of this method is model_path'''
         logging.info("Model Training Initiated")
         try:
             # Getting Transformed Train and Test Data:
@@ -68,6 +69,8 @@ class ModelTrainer:
 
         except Exception as ex:
             raise CustomException(ex)
+        
+        return model_path
 
 
 if __name__=="__main__":
