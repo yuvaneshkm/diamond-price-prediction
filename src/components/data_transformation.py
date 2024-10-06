@@ -10,7 +10,12 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import RobustScaler, OrdinalEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from src.utils import numeric_categoric_columns, categoric_col_order, save_object, data_versioning
+from src.utils import (
+    numeric_categoric_columns,
+    categoric_col_order,
+    save_object,
+    data_versioning,
+)
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -126,25 +131,25 @@ class DataTransformation:
             logging.info("Data Preprocessing completed")
 
             # save the preprocessor object in artifact folder:
-            preprocessor_path = Path(self.data_transformation_config.preprocessor_obj_path)
-            save_object(
-                preprocessor_path,
-                preprocessor_obj
+            preprocessor_path = Path(
+                self.data_transformation_config.preprocessor_obj_path
             )
+            save_object(preprocessor_path, preprocessor_obj)
             logging.info("Saved the Preprocessor Object to the artifacts folder")
 
             # versioning the preprocessor object:
-            data_versioning(preprocessor_path, "versioning_preprocessor_object")
+            data_versioning(str(preprocessor_path), "versioning_preprocessor_object")
             logging.info("Versioned the Preprocessor Object using DVC")
 
         except Exception as ex:
             raise CustomException(ex)
 
         return (preprocessed_train_df, preprocessed_test_df)
-    
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     from src.components import data_ingestion
+
     di_obj = data_ingestion.DataIngestion()
     train_path, test_path = di_obj.initiate_data_ingestion()
     obj = DataTransformation()

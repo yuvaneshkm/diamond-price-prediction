@@ -50,13 +50,10 @@ with DAG(
     @task
     def start_data_ingestion():
         try:
-            raw_data_path, train_data_path, test_data_path = (
-                di_obj.initiate_data_ingestion()
-            )
+            train_data_path, test_data_path = di_obj.initiate_data_ingestion()
         except Exception as ex:
             raise CustomException(ex)
         return {
-            "raw_path": raw_data_path,
             "train_path": train_data_path,
             "test_path": test_data_path,
         }
@@ -64,11 +61,10 @@ with DAG(
     @task
     def start_data_transformation(data_ingestion_artifact):
         try:
-            raw_path = data_ingestion_artifact["raw_path"]
             train_path = data_ingestion_artifact["train_path"]
             test_path = data_ingestion_artifact["test_path"]
             preprocessed_train_df, preprocessed_test_df = (
-                dt_obj.initiate_data_transformation(raw_path, train_path, test_path)
+                dt_obj.initiate_data_transformation(train_path, test_path)
             )
         except Exception as ex:
             raise CustomException(ex)
@@ -78,30 +74,31 @@ with DAG(
         }
 
     @task
-    def start_model_training(data_ingestion_artifact, data_transformation_artifact):
+    def start_model_training(data_transformation_artifact):
         try:
-            raw_path = data_ingestion_artifact["raw_path"]
             pre_train_df = data_transformation_artifact["pre_train_df"]
             pre_test_df = data_transformation_artifact["pre_test_df"]
-            mt_obj.initiate_model_training(pre_train_df, pre_test_df, raw_path)
+            model_path = mt_obj.initiate_model_training(pre_train_df, pre_test_df)
         except Exception as ex:
             raise CustomException(ex)
+        return {"model_path": model_path}
 
     @task
-    def start_model_evaluation(data_transformation_artifact):
+    def start_model_evaluation(data_transformation_artifact, model_training_artifacts):
         try:
             pre_test_df = data_transformation_artifact["pre_test_df"]
-            me_obj.initiate_model_evaluation(pre_test_df)
+            model_path = model_training_artifacts["model_path"]
+            me_obj.initiate_model_evaluation(pre_test_df, model_path)
         except Exception as ex:
             raise CustomException(ex)
 
     # defining the tasks:
     data_ingestion_task = start_data_ingestion()
     data_transformation_task = start_data_transformation(data_ingestion_task)
-    model_training_task = start_model_training(
-        data_ingestion_task, data_transformation_task
+    model_training_task = start_model_training(data_transformation_task)
+    model_evaluation_task = start_model_evaluation(
+        data_transformation_task, model_training_task
     )
-    model_evaluation_task = start_model_evaluation(data_transformation_task)
 
     # task execution flow:
     (

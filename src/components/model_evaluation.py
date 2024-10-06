@@ -1,5 +1,4 @@
 # Importing necessary libraries:
-import os
 from pathlib import Path
 from urllib.parse import urlparse
 from typing import Tuple
@@ -17,7 +16,8 @@ warnings.filterwarnings("ignore")
 
 # initialise dagshub:
 logging.info("Initialise the dagshub")
-dagshub.init(repo_owner='yuvaneshkm', repo_name='diamond-price-prediction', mlflow=True)
+dagshub.init(repo_owner="yuvaneshkm", repo_name="diamond-price-prediction", mlflow=True)
+
 
 class ModelEvaluation:
 
@@ -45,7 +45,7 @@ class ModelEvaluation:
 
         return (MSE, MAE, R2_Score)
 
-    def initiate_model_evaluation(self, test_data: pd.DataFrame, model_path:str):
+    def initiate_model_evaluation(self, test_data: pd.DataFrame, model_path: Path):
         logging.info("Model Evaluation Initiated")
         try:
             logging.info("Test data imported")
@@ -53,7 +53,6 @@ class ModelEvaluation:
             y_test = test_data["price"]
 
             # loading the model:
-            model_path = Path(model_path)
             model = load_object(model_path)  # model
             logging.info("Model imported")
 
@@ -68,9 +67,10 @@ class ModelEvaluation:
             logging.info("Calculating MAE, MSE and R2_Score")
             (mse, mae, r2) = self.evaluate_metrics(y_test, y_pred)
 
-
             # set the remote server uri for tracking and model registry:
-            tracking_uri = "https://dagshub.com/yuvaneshkm/diamond-price-prediction.mlflow"
+            tracking_uri = (
+                "https://dagshub.com/yuvaneshkm/diamond-price-prediction.mlflow"
+            )
             mlflow.set_tracking_uri(tracking_uri)
 
             # start the mlflow run:

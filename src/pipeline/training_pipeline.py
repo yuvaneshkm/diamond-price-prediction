@@ -17,7 +17,7 @@ class TrainingPipeline:
 
     # data ingestion:
     def start_data_ingestion(self):
-        '''return (train_data_path, test_data_path)'''
+        """return (train_data_path, test_data_path)"""
         try:
             data_ingestion_obj = data_ingestion.DataIngestion()
             train_data_path, test_data_path = (
@@ -28,10 +28,8 @@ class TrainingPipeline:
         return (train_data_path, test_data_path)
 
     # data transformation:
-    def start_data_transformation(
-        self, train_data_path: Path, test_data_path: Path
-    ):
-        '''return (preprocessed_train_df, preprocessed_test_df)'''
+    def start_data_transformation(self, train_data_path: Path, test_data_path: Path):
+        """return (preprocessed_train_df, preprocessed_test_df)"""
         try:
             data_transformation_obj = data_transformation.DataTransformation()
             preprocessed_train_df, preprocessed_test_df = (
@@ -49,7 +47,7 @@ class TrainingPipeline:
         preprocessed_train_df: pd.DataFrame,
         preprocessed_test_df: pd.DataFrame,
     ):
-        '''return model_path'''
+        """return model_path"""
         try:
             model_training_obj = model_trainer.ModelTrainer()
             model_path = model_training_obj.initiate_model_training(
@@ -60,10 +58,14 @@ class TrainingPipeline:
         return model_path
 
     # model evaluation:
-    def start_model_evaluation(self, preprocessed_test_data: pd.DataFrame, model_path: Path):
+    def start_model_evaluation(
+        self, preprocessed_test_data: pd.DataFrame, model_path: Path
+    ):
         try:
             model_evaluation_obj = model_evaluation.ModelEvaluation()
-            model_evaluation_obj.initiate_model_evaluation(preprocessed_test_data, model_path)
+            model_evaluation_obj.initiate_model_evaluation(
+                preprocessed_test_data, model_path
+            )
         except Exception as ex:
             raise CustomException(ex)
 
@@ -71,9 +73,7 @@ class TrainingPipeline:
     def start_training(self):
         try:
             train_path, test_path = self.start_data_ingestion()
-            pre_train, pre_test = self.start_data_transformation(
-                train_path, test_path
-            )
+            pre_train, pre_test = self.start_data_transformation(train_path, test_path)
             model_path = self.start_model_training(pre_train, pre_test)
             self.start_model_evaluation(pre_test, model_path)
         except Exception as ex:

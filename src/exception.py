@@ -1,6 +1,5 @@
 # Importing necessary libraries:
 import sys
-from src.logger import logging
 
 
 # Creating a class to handle exceprion by inheriting Exception class:

@@ -12,6 +12,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+
 # Inputs related to data_ingestion component:
 @dataclass
 class DataIngestionConfig:
@@ -24,7 +25,7 @@ class DataIngestion:
     def __init__(self):
         self.ingestion_config = DataIngestionConfig()
 
-    def initiate_data_ingestion(self) -> Tuple[str, str]:
+    def initiate_data_ingestion(self) -> Tuple[Path, Path]:
         """
         * This method will ingest data from Google Drive and split data into
         Train and Test set and store the data in the artifacts folder.
@@ -38,7 +39,9 @@ class DataIngestion:
             mongo_obj = MongoDB(host_url="mongodb://localhost:27017")
 
             # loading the raw data
-            df = mongo_obj.load_data(database="diamond-price-prediction-db", collection_name="diamond-data")
+            df = mongo_obj.load_data(
+                database="diamond-price-prediction-db", collection_name="diamond-data"
+            )
             df.drop("id", axis=1, inplace=True)
 
             # Ensuring the artifacts directory exists:
@@ -70,9 +73,9 @@ class DataIngestion:
         except Exception as ex:
             raise CustomException(ex)
 
-        return (str(train_df_path), str(test_df_path))
+        return (train_df_path, test_df_path)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     di_obj = DataIngestion()
     di_obj.initiate_data_ingestion()

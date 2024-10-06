@@ -28,7 +28,7 @@ class ModelTrainer:
         preprocessed_train_df: pd.DataFrame,
         preprocessed_test_df: pd.DataFrame,
     ) -> Path:
-        '''The output of this method is model_path'''
+        """The output of this method is model_path"""
         logging.info("Model Training Initiated")
         try:
             # Getting Transformed Train and Test Data:
@@ -64,23 +64,25 @@ class ModelTrainer:
             model_path = Path(self.model_trainer_config.trained_model_path)
             save_object(model_path, best_model)
             # versioning the model using dvc:
-            data_versioning(model_path, "versioning_model_object")
+            data_versioning(str(model_path), "versioning_model_object")
             logging.info("Versioned the Model Object using DVC")
 
         except Exception as ex:
             raise CustomException(ex)
-        
+
         return model_path
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     from src.components import data_ingestion, data_transformation
 
     di_obj = data_ingestion.DataIngestion()
     train_data_path, test_data_path = di_obj.initiate_data_ingestion()
 
     dt_obj = data_transformation.DataTransformation()
-    pre_train_df, pre_test_df = dt_obj.initiate_data_transformation(train_data_path, test_data_path)
+    pre_train_df, pre_test_df = dt_obj.initiate_data_transformation(
+        train_data_path, test_data_path
+    )
 
     mt_obj = ModelTrainer()
     mt_obj.initiate_model_training(pre_train_df, pre_test_df)
