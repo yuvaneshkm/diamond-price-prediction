@@ -22,12 +22,10 @@ def data_versioning(filepath:str, commit_message:str):
 
 
 # saving whether a model or a preprocessing object:
-def save_object(directory: Path, filename: str, object):
+def save_object(filepath: str, object):
     """This function will save ML model and Preprocessing object as a pickle file"""
     try:
-        directory = Path(directory)
-        os.makedirs(directory, exist_ok=True)
-        filepath = os.path.join(directory, filename)
+        filepath = Path(filepath)
         with open(filepath, "wb") as file_obj:
             pickle.dump(object, file_obj)
     except Exception as ex:
@@ -45,12 +43,12 @@ def load_object(filepath: Path):
 
 
 # numeric and categoric columns:
-def numeric_categoric_columns(raw_data_path: Path) -> Tuple[List[str], List[str]]:
+def numeric_categoric_columns(train_data_path: Path) -> Tuple[List[str], List[str]]:
     """
     * This function will give list of all the Numeric and Categoric columns in the dataset
     * The Output of the function is (numeric_col, categoric_col)"""
     # reading raw data:
-    raw_df = pd.read_csv(raw_data_path)
+    raw_df = pd.read_csv(train_data_path)
     raw_df.drop("price", axis=1, inplace=True)
     # numeric and categoric columns:
     numeric_col = []

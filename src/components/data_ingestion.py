@@ -1,7 +1,7 @@
 # Importing necessary libraries:
 import os
-import sys
 from typing import Tuple
+from pathlib import Path
 from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
@@ -9,7 +9,6 @@ from src.utils import data_versioning
 from dbsconnector.databases import MongoDB
 from sklearn.model_selection import train_test_split
 import warnings
-from pathlib import Path
 
 warnings.filterwarnings("ignore")
 
@@ -30,7 +29,7 @@ class DataIngestion:
         * This method will ingest data from Google Drive and split data into
         Train and Test set and store the data in the artifacts folder.
         * The output of this method is a tuple of
-        (raw_data_path, train_data_path, test_data_path)
+        (train_data_path, test_data_path)
         """
 
         logging.info("Data Ingestion Started")
@@ -68,15 +67,12 @@ class DataIngestion:
 
             logging.info("Data Ingestion Completed")
 
-            print("hello")
-
         except Exception as ex:
             raise CustomException(ex)
-        print("world")
 
         return (str(train_df_path), str(test_df_path))
 
 
 if __name__=="__main__":
-    obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    di_obj = DataIngestion()
+    di_obj.initiate_data_ingestion()

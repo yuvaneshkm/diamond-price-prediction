@@ -10,7 +10,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import RobustScaler, OrdinalEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from src.utils import numeric_categoric_columns, categoric_col_order, save_object
+from src.utils import numeric_categoric_columns, categoric_col_order, save_object, data_versioning
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_name = "preprocessor.pkl"
+    preprocessor_obj_path = os.path.join("artifacts", "preprocessor.pkl")
 
 
 class DataTransformation:
@@ -27,7 +27,7 @@ class DataTransformation:
         self.data_transformation_config = DataTransformationConfig()
 
     # Get Data Transformation:
-    def get_data_transformer(self, raw_data_path: Path):
+    def get_data_transformer(self, train_data_path: Path):
         """This method will return the Preprocessing object"""
 
         try:
@@ -36,7 +36,7 @@ class DataTransformation:
 
             # get numeric and categoric columns:
             logging.info("Getting Numeric and Categoric columns")
-            num_cols, cate_cols = numeric_categoric_columns(raw_data_path)
+            num_cols, cate_cols = numeric_categoric_columns(train_data_path)
             logging.info("Getting catrgorical columns order")
             cut_order, color_order, clarity_order = categoric_col_order()
 
@@ -78,7 +78,7 @@ class DataTransformation:
 
     # Initiate Data Transformation:
     def initiate_data_transformation(
-        self, raw_data_path: Path, train_data_path: Path, test_data_path: Path
+        self, train_data_path: Path, test_data_path: Path
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         * The Output of the method is (preprocessed_train_df, preprocessed_test_df)"""
@@ -94,7 +94,7 @@ class DataTransformation:
 
             # get preprocessing object:
             logging.info("Loading Preprocessor object")
-            preprocessor_obj = self.get_data_transformer(raw_data_path)
+            preprocessor_obj = self.get_data_transformer(train_data_path)
             logging.info("Preprocessor object Loaded")
 
             # Train data --> Dependent and Independent features:
@@ -108,12 +108,14 @@ class DataTransformation:
 
             # preprocessing on test and train data:
             logging.info("Preprocess Train and Test data")
+
             # Train data:
             preprocessed_X_train_df = preprocessor_obj.fit_transform(X_train_df)
             preprocessed_train_df = pd.concat(
                 [preprocessed_X_train_df, y_train_df], axis=1
             )
             logging.info(f"Preprocessed Train data\n{preprocessed_train_df.head()}")
+
             # Test data:
             preprocessed_X_test_df = preprocessor_obj.transform(X_test_df)
             preprocessed_test_df = pd.concat(
@@ -124,15 +126,26 @@ class DataTransformation:
             logging.info("Data Preprocessing completed")
 
             # save the preprocessor object in artifact folder:
-            directory = Path(os.path.dirname(raw_data_path))
+            preprocessor_path = Path(self.data_transformation_config.preprocessor_obj_path)
             save_object(
-                directory,
-                self.data_transformation_config.preprocessor_obj_file_name,
-                preprocessor_obj,
+                preprocessor_path,
+                preprocessor_obj
             )
             logging.info("Saved the Preprocessor Object to the artifacts folder")
+
+            # versioning the preprocessor object:
+            data_versioning(preprocessor_path, "versioning_preprocessor_object")
+            logging.info("Versioned the Preprocessor Object using DVC")
 
         except Exception as ex:
             raise CustomException(ex)
 
         return (preprocessed_train_df, preprocessed_test_df)
+    
+
+if __name__=="__main__":
+    from src.components import data_ingestion
+    di_obj = data_ingestion.DataIngestion()
+    train_path, test_path = di_obj.initiate_data_ingestion()
+    obj = DataTransformation()
+    obj.initiate_data_transformation(train_path, test_path)
