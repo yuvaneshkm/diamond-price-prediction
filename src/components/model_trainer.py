@@ -6,7 +6,7 @@ from src.logger import logging
 from dataclasses import dataclass
 import pandas as pd
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
-from src.utils import model_trainer, save_object
+from src.utils import model_trainer, save_object, data_versioning
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -62,8 +62,22 @@ class ModelTrainer:
             logging.info("Saving the best model")
             model_path = Path(self.model_trainer_config.trained_model_path)
             save_object(model_path, best_model)
-            # 
-            
+            # versioning the model using dvc:
+            data_versioning(model_path, "versioning_model_object")
+            logging.info("Versioned the Model Object using DVC")
 
         except Exception as ex:
             raise CustomException(ex)
+
+
+if __name__=="__main__":
+    from src.components import data_ingestion, data_transformation
+
+    di_obj = data_ingestion.DataIngestion()
+    train_data_path, test_data_path = di_obj.initiate_data_ingestion()
+
+    dt_obj = data_transformation.DataTransformation()
+    pre_train_df, pre_test_df = dt_obj.initiate_data_transformation(train_data_path, test_data_path)
+
+    mt_obj = ModelTrainer()
+    mt_obj.initiate_model_training(pre_train_df, pre_test_df)
