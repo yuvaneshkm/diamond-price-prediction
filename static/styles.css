@@ -1,0 +1,70 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Change to Roboto */
+    background-color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center; /* Center the title */
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    max-height: 300px;
+    margin: auto;
+    background: whitesmoke;
+    padding: 110px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 columns */
+    gap: 20px; /* Space between grid items */
+}
+
+label {
+    margin: 7px 0;
+}
+
+input, select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 15px;
+    margin-top: 30px;
+    background-color: rgb(38, 0, 255);
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(67, 53, 161);
+}
+
+.result {
+    margin-top: 25px;
+    font-size: 25px;
+    text-align: center;
+    color: #333;
+}
+
+footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #666;
+}

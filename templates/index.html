@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Diamond Price Prediction</title>
+    <link rel="icon" href="https://clipart-library.com/images/dc48RnKni.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>💎 Diamond Price Prediction 💎</h1>
+
+    <div class="container">
+        <form id="prediction-form">
+
+            <div class="grid-container">
+
+                <label for="carat">Carat:</b></label>
+                <input type="number" id="carat" required>
+                
+                <label for="cut">Cut:</label>
+                <select id="cut" required>
+                    <option value="Fair">Fair</option>
+                    <option value="Good">Good</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Ideal">Ideal</option>
+                </select>
+                
+                <label for="color">Color:</label>
+                <select id="color" required>
+                    <option value="J">J</option>
+                    <option value="I">I</option>
+                    <option value="H">H</option>
+                    <option value="G">G</option>
+                    <option value="F">F</option>
+                    <option value="E">E</option>
+                    <option value="D">D</option>
+                </select>
+                
+                <label for="clarity">Clarity:</label>
+                <select id="clarity" required>
+                    <option value="I1">I1</option>
+                    <option value="SI2">SI2</option>
+                    <option value="SI1">SI1</option>
+                    <option value="VS2">VS2</option>
+                    <option value="VS1">VS1</option>
+                    <option value="VVS2">VVS2</option>
+                    <option value="VVS1">VVS1</option>
+                    <option value="IF">IF</option>
+                </select>
+
+                <label for="depth">Depth (%):</label>
+                <input type="number" id="depth" required step="0.01">
+                
+                <label for="table">Table (%):</label>
+                <input type="number" id="table" required step="0.01">
+                
+                <label for="x">Length (mm):</label>
+                <input type="number" id="x" required step="0.01">
+                
+                <label for="y">Width (mm):</label>
+                <input type="number" id="y" required step="0.01">
+                
+                <label for="z">Depth (mm):</label>
+                <input type="number" id="z" required step="0.01">
+
+            </div>
+
+            <button type="submit">Predict Price</button>
+            
+        </form>
+        
+        <div id="result" class="result"><b>The Predicted price is: $0.00</b></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Diamond Price Predictor. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
