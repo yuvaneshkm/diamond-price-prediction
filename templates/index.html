@@ -7,8 +7,8 @@
 
     <title>Diamond Price Prediction</title>
     <link rel="icon" href="https://clipart-library.com/images/dc48RnKni.png" type="image/x-icon">
-
-    <link rel="stylesheet" href="static/css/styles.css">
+    
+    <link rel="stylesheet" href="static/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
@@ -16,72 +16,105 @@
     <h1>💎 Diamond Price Prediction 💎</h1>
 
     <div class="container">
-        <form id="prediction-form">
+
+        <form id="prediction-form" action="/result" method="post">
 
             <div class="grid-container">
 
-                <label for="carat">Carat:</b></label>
-                <input type="number" id="carat" required>
-                
+                <label for="carat">Carat:</label>
+                <div class="input-with-value">
+                    <input type="number" name="carat" id="carat" min="0.1" max="5" step="0.1" placeholder="Carat" required>
+                </div>
+
                 <label for="cut">Cut:</label>
-                <select id="cut" required>
-                    <option value="Fair">Fair</option>
-                    <option value="Good">Good</option>
-                    <option value="Very Good">Very Good</option>
-                    <option value="Premium">Premium</option>
-                    <option value="Ideal">Ideal</option>
-                </select>
-                
+                <div class="input-with-value">
+                    <select name="cut" id="cut" required>
+                        <option selected disabled>Select Cut type</option>
+                        <option value="0">Fair</option>
+                        <option value="1">Good</option>
+                        <option value="2">Very Good</option>
+                        <option value="3">Premium</option>
+                        <option value="4">Ideal</option>
+                    </select>
+                </div>
+
                 <label for="color">Color:</label>
-                <select id="color" required>
-                    <option value="J">J</option>
-                    <option value="I">I</option>
-                    <option value="H">H</option>
-                    <option value="G">G</option>
-                    <option value="F">F</option>
-                    <option value="E">E</option>
-                    <option value="D">D</option>
-                </select>
-                
+                <div class="input-with-value">
+                    <input type="range" name="color" id="color" min="0" max="6" value="3" required>
+                    <span id="color-value">G</span>
+                </div>
+
                 <label for="clarity">Clarity:</label>
-                <select id="clarity" required>
-                    <option value="I1">I1</option>
-                    <option value="SI2">SI2</option>
-                    <option value="SI1">SI1</option>
-                    <option value="VS2">VS2</option>
-                    <option value="VS1">VS1</option>
-                    <option value="VVS2">VVS2</option>
-                    <option value="VVS1">VVS1</option>
-                    <option value="IF">IF</option>
-                </select>
+                <div class="input-with-value">
+                    <input type="range" name="clarity" id="clarity" min="0" max="7" value="4" required>
+                    <span id="clarity-value">VS2</span>
+                </div>
 
                 <label for="depth">Depth (%):</label>
-                <input type="number" id="depth" required step="0.01">
-                
+                <div class="input-with-value">
+                    <input type="number" name="depth" id="depth" min="50" max="75" step="0.2" placeholder="Depth (%)" required>
+                </div>
+
                 <label for="table">Table (%):</label>
-                <input type="number" id="table" required step="0.01">
-                
+                <div class="input-with-value">
+                    <input type="number" name="table" id="table" min="45" max="85" step="0.2" placeholder="Table (%)" required>
+                </div>
+
                 <label for="x">Length (mm):</label>
-                <input type="number" id="x" required step="0.01">
-                
+                <div class="input-with-value">
+                    <input type="number" name="x" id="x" min="0.1" max="10.5" step="0.01" placeholder="Length (mm)" required>
+                </div>
+
                 <label for="y">Width (mm):</label>
-                <input type="number" id="y" required step="0.01">
-                
+                <div class="input-with-value">
+                    <input type="number" name="y" id="y" min="0.1" max="10.5" step="0.01" placeholder="Width (mm)" required>
+                </div>
+
                 <label for="z">Depth (mm):</label>
-                <input type="number" id="z" required step="0.01">
+                <div class="input-with-value">
+                    <input type="number" name="z" id="z" min="0.1" max="35" step="0.01" placeholder="Depth (mm)" required>
+                </div>
 
             </div>
 
             <button type="submit">Predict Price</button>
             
         </form>
-        
-        <div id="result" class="result"><b>The Predicted price is: $0.00</b></div>
     </div>
 
     <footer>
         <p>&copy; 2024 Diamond Price Predictor. All rights reserved.</p>
     </footer>
 
+    <!-- JavaScript to show the real-world values for color and clarity -->
+    <script>
+        // Mapping for color and clarity values
+        const colorMap = {
+            0:'J', 1:'I', 2:'H', 3:'G', 4:'F', 5:'E', 6:'D'
+        };
+        const clarityMap = {
+            0:'I1', 1:'SI2', 2:'SI1', 3:'VS2', 4:'VS1', 5:'VVS2', 6:'VVS1', 7:'IF'
+        };
+
+        // Get references to color and clarity range elements and their display spans
+        const colorSlider = document.getElementById('color');
+        const colorValue = document.getElementById('color-value');
+        const claritySlider = document.getElementById('clarity');
+        const clarityValue = document.getElementById('clarity-value');
+
+        // Update the color value display based on colorMap
+        colorSlider.addEventListener('input', function() {
+            colorValue.textContent = colorMap[colorSlider.value];
+        });
+
+        // Update the clarity value display based on clarityMap
+        claritySlider.addEventListener('input', function() {
+            clarityValue.textContent = clarityMap[claritySlider.value];
+        });
+
+        // Initialize the display with default slider values
+        colorValue.textContent = colorMap[colorSlider.value];
+        clarityValue.textContent = clarityMap[claritySlider.value];
+    </script>
 </body>
 </html>
