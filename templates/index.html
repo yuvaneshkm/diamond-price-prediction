@@ -23,51 +23,53 @@
 
                 <label for="carat">Carat:</label>
                 <div class="input-with-value">
-                    <input type="number" name="carat" id="carat" min="0.1" max="5" step="0.1" placeholder="Carat" required>
+                    <input type="number" name="carat" id="carat" min="0.1" max="6" step="0.01" placeholder="Carat" required>
                 </div>
 
                 <label for="cut">Cut:</label>
                 <div class="input-with-value">
                     <select name="cut" id="cut" required>
                         <option selected disabled>Select Cut type</option>
-                        <option value="0">Fair</option>
-                        <option value="1">Good</option>
-                        <option value="2">Very Good</option>
-                        <option value="3">Premium</option>
-                        <option value="4">Ideal</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Good">Good</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Premium">Premium</option>
+                        <option value="Ideal">Ideal</option>
                     </select>
                 </div>
 
                 <label for="color">Color:</label>
                 <div class="input-with-value">
-                    <input type="range" name="color" id="color" min="0" max="6" value="3" required>
+                    <input type="range" id="color" min="0" max="6" value="3" required>
                     <span id="color-value">G</span>
+                    <input type="hidden" name="color" id="color-hidden">
                 </div>
 
                 <label for="clarity">Clarity:</label>
                 <div class="input-with-value">
-                    <input type="range" name="clarity" id="clarity" min="0" max="7" value="4" required>
+                    <input type="range" id="clarity" min="0" max="7" value="4" required>
                     <span id="clarity-value">VS2</span>
+                    <input type="hidden" name="clarity" id="clarity-hidden">
                 </div>
 
                 <label for="depth">Depth (%):</label>
                 <div class="input-with-value">
-                    <input type="number" name="depth" id="depth" min="50" max="75" step="0.2" placeholder="Depth (%)" required>
+                    <input type="number" name="depth" id="depth" min="40" max="80" step="0.2" placeholder="Depth (%)" required>
                 </div>
 
                 <label for="table">Table (%):</label>
                 <div class="input-with-value">
-                    <input type="number" name="table" id="table" min="45" max="85" step="0.2" placeholder="Table (%)" required>
+                    <input type="number" name="table" id="table" min="40" max="100" step="0.2" placeholder="Table (%)" required>
                 </div>
 
                 <label for="x">Length (mm):</label>
                 <div class="input-with-value">
-                    <input type="number" name="x" id="x" min="0.1" max="10.5" step="0.01" placeholder="Length (mm)" required>
+                    <input type="number" name="x" id="x" min="0.1" max="11" step="0.01" placeholder="Length (mm)" required>
                 </div>
 
                 <label for="y">Width (mm):</label>
                 <div class="input-with-value">
-                    <input type="number" name="y" id="y" min="0.1" max="10.5" step="0.01" placeholder="Width (mm)" required>
+                    <input type="number" name="y" id="y" min="0.1" max="11" step="0.01" placeholder="Width (mm)" required>
                 </div>
 
                 <label for="z">Depth (mm):</label>
@@ -99,22 +101,30 @@
         // Get references to color and clarity range elements and their display spans
         const colorSlider = document.getElementById('color');
         const colorValue = document.getElementById('color-value');
+        const colorHidden = document.getElementById('color-hidden');
+        
         const claritySlider = document.getElementById('clarity');
         const clarityValue = document.getElementById('clarity-value');
+        const clarityHidden = document.getElementById('clarity-hidden');
 
-        // Update the color value display based on colorMap
+        // Update the color value display and hidden field based on colorMap
         colorSlider.addEventListener('input', function() {
             colorValue.textContent = colorMap[colorSlider.value];
+            colorHidden.value = colorMap[colorSlider.value];
         });
 
-        // Update the clarity value display based on clarityMap
+        // Update the clarity value display and hidden field based on clarityMap
         claritySlider.addEventListener('input', function() {
             clarityValue.textContent = clarityMap[claritySlider.value];
+            clarityHidden.value = clarityMap[claritySlider.value];
         });
 
-        // Initialize the display with default slider values
+        // Initialize the display and hidden field values with default slider values
         colorValue.textContent = colorMap[colorSlider.value];
+        colorHidden.value = colorMap[colorSlider.value];
+        
         clarityValue.textContent = clarityMap[claritySlider.value];
+        clarityHidden.value = clarityMap[claritySlider.value];
     </script>
 </body>
 </html>
