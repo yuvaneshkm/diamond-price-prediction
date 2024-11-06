@@ -38,5 +38,6 @@ Detailed analysis to understand the data distribution, key patterns, and insight
 docker pull yuvaneshkm05/diamond-price-predictor
 docker run -d -p 5000:5000 yuvaneshkm05/diamond-price-predictor
 ```
+- After running, visit http://localhost:5000 to access the Diamond Price Predictor app.
 
 This project demonstrates the end-to-end implementation of a machine learning solution, including MLOps practices and Dockerized deployment for scalable and reproducible results.
