@@ -10,28 +10,28 @@ The initial data was sourced from a MongoDB database. Data exploration and exper
 Detailed analysis to understand the data distribution, key patterns, and insights.
 
 ## Model Experimentation:
-- Models tested: Linear Regression, Lasso Regression, Ridge Regression, and ElasticNet.
-    - Lasso Regression achieved the highest accuracy of 93%.
-    - Various hyperparameters and cross-validation techniques were applied to optimize each model.
+- **Models tested:** Linear Regression, Lasso Regression, Ridge Regression, and ElasticNet.
+- Lasso Regression achieved the highest accuracy of 93%.
+- Various hyperparameters and cross-validation techniques were applied to optimize each model.
 
 ## Modular ML Code Organization:
-    - **Data Ingestion:** Handling and versioning input data.
-    - **Data Transformation:** Data cleaning and feature engineering.
-    - **Model Training:** Training and optimizing models.
-    - **Model Evaluation:** Evaluating and selecting the best model.
-    - Source code management was done using **Git**, and **DVC** was used for data versioning.
-    - **MLflow** was used for tracking parameters, metrics, and model registry. The final Lasso model is registered in the **MLflow Model Registry**.
+- **Data Ingestion:** Handling and versioning input data.
+- **Data Transformation:** Data cleaning and feature engineering.
+- **Model Training:** Training and optimizing models.
+- **Model Evaluation:** Evaluating and selecting the best model.
+- Source code management was done using **Git**, and **DVC** was used for data versioning.
+- **MLflow** was used for tracking parameters, metrics, and model registry. The final Lasso model is registered in the **MLflow Model Registry**.
 
 ## Pipelines:
-    - **Training Pipeline:** Automated workflow for data ingestion, transformation, and model training.
-    - **Prediction Pipeline:** Pipeline for model inference.
+- **Training Pipeline:** Automated workflow for data ingestion, transformation, and model training.
+- **Prediction Pipeline:** Pipeline for model inference.
 
 ## User Interface (UI):
-    - A user-friendly web UI built with HTML and CSS.
-    - Developed a Flask app to serve the UI and prediction functionalities.
+- A user-friendly web UI built with HTML and CSS.
+- Developed a Flask app to serve the UI and prediction functionalities.
 
 ## Dockerized Deployment:
-    - The Flask app was Dockerized and pushed to Docker Hub.
+- The Flask app was Dockerized and pushed to Docker Hub.
 
 ## To pull and run the Docker image:
 ```bash
