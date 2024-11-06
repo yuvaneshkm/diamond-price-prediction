@@ -30,6 +30,7 @@ jobs:
         pip install flake8 pytest black
         pip install tox==3.24.4
         pip install -r requirements_dev.txt
+        pip install path/to/diamond-price-predictor-0.0.1.zip
 
     - name: Display Python version and installed packages
       run: |
