@@ -46,4 +46,20 @@ docker run -d -p 5000:5000 yuvaneshkm05/diamond-price-predictor
 ### Result
 ![User Input](https://github.com/yuvaneshkm/diamond-price-prediction/blob/main/images/result.png)
 
+
+# Project Impact:
+
+## Informed Pricing for Jewelers and Retailers
+- By predicting diamond prices accurately, jewelers and retailers can set competitive, data-driven prices. This helps them avoid undervaluing high-quality stones or overpricing lower-quality ones, resulting in better profit margins and customer satisfaction.
+
+## Transparency and Trust for Customers
+- The model helps create transparency in pricing by basing predictions on objective factors (cut, clarity, carat, etc.), reducing the subjectivity often associated with diamond valuation.
+- Customers benefit from consistent, fair pricing, which fosters trust and loyalty to the retailer or brand.
+
+## Enhanced Online Diamond Marketplaces
+- For e-commerce platforms specializing in diamonds, this model can integrate seamlessly to provide instant price predictions for listed diamonds, enhancing the shopping experience for customers.
+
+In summary, the Diamond Price Prediction project can transform the diamond industry by making pricing more transparent, accessible, and data-driven, while also setting a benchmark for using machine learning in luxury goods pricing and inventory management. This real-world impact makes it a valuable tool for businesses, consumers, and investors alike.
+
+---
 This project demonstrates the end-to-end implementation of a machine learning solution, including MLOps practices and Dockerized deployment for scalable and reproducible results.
