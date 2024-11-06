@@ -10,7 +10,7 @@ The initial data was sourced from a MongoDB database. Data exploration and exper
 Detailed analysis to understand the data distribution, key patterns, and insights.
 
 ## Model Experimentation:
-    - **Models tested:** Linear Regression, Lasso Regression, Ridge Regression, and ElasticNet.
+    **Models tested:** Linear Regression, Lasso Regression, Ridge Regression, and ElasticNet.
     - Lasso Regression achieved the highest accuracy of 93%.
     - Various hyperparameters and cross-validation techniques were applied to optimize each model.
 
